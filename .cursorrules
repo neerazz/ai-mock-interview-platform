@@ -1,0 +1,443 @@
+# AI Mock Interview Platform - Cursor IDE Rules
+# Ensures modular, extensible, maintainable code with excellent test coverage
+
+## Project Context
+You are working on an AI-powered mock interview platform (Python POC).
+This is a Streamlit-based application with LangChain AI agents.
+Focus: System Design interviews with real-time whiteboarding and feedback.
+
+## Core Principles
+
+### 1. ALWAYS Check Existing Documents First
+- Before creating ANY new file, check if a similar document already exists
+- Update existing documentation rather than creating duplicates
+- Delete obsolete or redundant files
+- Maintain a single source of truth for each concept
+
+### 2. Modularity
+- Each module should have a single, well-defined responsibility
+- Keep functions small (< 50 lines)
+- Keep classes focused (< 200 lines)
+- Use clear separation of concerns:
+  - UI logic in src/ui/
+  - Business logic in src/agent/ and src/utils/
+  - Data access in src/db/
+- Avoid circular dependencies
+
+### 3. Extensibility
+- Use dependency injection for flexibility
+- Prefer composition over inheritance
+- Use abstract base classes for interfaces
+- Make components pluggable (e.g., LLM provider, transcription service)
+- Use configuration files for environment-specific values
+
+### 4. Maintainability
+- Write self-documenting code with clear naming
+- Add docstrings to all public functions/classes (Google style)
+- Use type hints for all function signatures
+- Keep complexity low (cyclomatic complexity < 10)
+- Follow PEP 8 style guide
+- Use meaningful variable names (no single letters except loop counters)
+
+## Code Style & Standards
+
+### Python Code
+```python
+# GOOD Example
+from typing import List, Optional
+from dataclasses dataclass
+
+@dataclass
+class InterviewSession:
+    """Represents a single mock interview session.
+    
+    Attributes:
+        session_id: Unique identifier for the session
+        user_id: ID of the user taking the interview
+        duration_minutes: Interview duration in minutes
+        status: Current status (pending/active/completed)
+    """
+    session_id: str
+    user_id: str
+    duration_minutes: int
+    status: str = "pending"
+    
+    def start(self) -> None:
+        """Mark session as active and record start time."""
+        self.status = "active"
+        # Implementation
+
+def parse_resume(file_path: str, llm_client: Any) -> dict:
+    """Extract structured data from resume PDF.
+    
+    Args:
+        file_path: Path to the resume PDF file
+        llm_client: LLM client for parsing
+        
+    Returns:
+        Dictionary containing parsed resume data
+        
+    Raises:
+        FileNotFoundError: If resume file doesn't exist
+        ParseError: If PDF cannot be parsed
+    """
+    # Implementation
+    pass
+```
+
+### Naming Conventions
+- Functions: `snake_case`
+- Classes: `PascalCase`
+- Constants: `UPPER_SNAKE_CASE`
+- Private methods: `_leading_underscore`
+- Files/modules: `snake_case.py`
+
+## Testing Requirements
+
+### Test Coverage Goals
+- **Minimum coverage**: 80% for all modules
+- **Critical paths**: 95%+ coverage (AI agent, DB operations)
+- **Test types**:
+  - Unit tests for all utility functions
+  - Integration tests for agent workflows
+  - UI tests for Streamlit pages
+
+### Test Structure
+```python
+# tests/test_resume_parser.py
+import pytest
+from src.utils.resume_parser import parse_resume
+from unittest.mock import Mock, patch
+
+class TestResumeParser:
+    """Test suite for resume parsing functionality."""
+    
+    def test_parse_valid_pdf(self, mock_llm_client, sample_resume_path):
+        """Test parsing a valid PDF resume."""
+        result = parse_resume(sample_resume_path, mock_llm_client)
+        
+        assert "name" in result
+        assert "email" in result
+        assert len(result["work_experience"]) > 0
+    
+    def test_parse_missing_file(self, mock_llm_client):
+        """Test error handling for missing file."""
+        with pytest.raises(FileNotFoundError):
+            parse_resume("nonexistent.pdf", mock_llm_client)
+    
+    @pytest.fixture
+    def mock_llm_client(self):
+        """Create mock LLM client for testing."""
+        return Mock()
+```
+
+### Test Organization
+- Mirror source structure in tests/
+- Use fixtures for common setup
+- Mock external dependencies (LLM APIs, file I/O)
+- Test edge cases and error paths
+- Use descriptive test names
+
+### Running Tests
+```bash
+# Run all tests
+pytest tests/
+
+# Run with coverage
+pytest --cov=src --cov-report=html tests/
+
+# Run specific test file
+pytest tests/test_resume_parser.py
+
+# Run tests matching pattern
+pytest -k "test_parse"
+```
+
+## File Organization Rules
+
+### When to Create New Files
+- New logical component (e.g., new AI tool, new UI page)
+- Module exceeds 300 lines
+- Reusable utility that fits nowhere else
+
+### When to Update Existing Files
+- Adding features to existing components
+- Bug fixes
+- Performance improvements
+- Refactoring
+
+### Files That Should NOT Be Duplicated
+- Configuration (use .env or config.py)
+- Database schema (single models.py)
+- Prompt templates (single prompts.py)
+- Constants (single constants.py)
+
+## Documentation Standards
+
+### Code Documentation
+```python
+class WhiteboardAnalyzer:
+    """Analyzes whiteboard drawings using computer vision and LLM.
+    
+    This class provides functionality to:
+    - Capture whiteboard as image
+    - Analyze system design patterns
+    - Extract components and relationships
+    - Identify missing elements
+    
+    Example:
+        >>> analyzer = WhiteboardAnalyzer(llm_client=gpt4_vision)
+        >>> result = analyzer.analyze(whiteboard_image)
+        >>> print(result.components)
+        ['API Gateway', 'Load Balancer', 'Database']
+    """
+    
+    def __init__(self, llm_client: VisionLLM):
+        """Initialize analyzer with vision-enabled LLM.
+        
+        Args:
+            llm_client: LLM client with vision capabilities (e.g., GPT-4V)
+        """
+        self.llm_client = llm_client
+```
+
+### README Updates
+- Update README.md when adding major features
+- Keep setup instructions current
+- Document environment variables
+- Add usage examples
+
+### Inline Comments
+- Explain "why", not "what"
+- Clarify complex algorithms
+- Document workarounds or hacks
+- Reference issues/tickets
+
+## Error Handling
+
+### Always Handle Errors Gracefully
+```python
+# GOOD
+def load_session(session_id: str) -> Optional[InterviewSession]:
+    """Load session from database.
+    
+    Args:
+        session_id: ID of session to load
+        
+    Returns:
+        InterviewSession if found, None otherwise
+        
+    Raises:
+        DatabaseError: If database connection fails
+    """
+    try:
+        return db.query(InterviewSession).filter_by(id=session_id).first()
+    except SQLAlchemyError as e:
+        logger.error(f"Failed to load session {session_id}: {e}")
+        raise DatabaseError(f"Cannot load session: {e}") from e
+
+# BAD - swallows errors
+def load_session(session_id):
+    try:
+        return db.query(Session).get(session_id)
+    except:
+        return None
+```
+
+### Logging
+- Use Python logging module
+- Log levels:
+  - DEBUG: Detailed info for debugging
+  - INFO: General informational messages
+  - WARNING: Warning messages
+  - ERROR: Error messages
+  - CRITICAL: Critical failures
+
+```python
+import logging
+
+logger = logging.getLogger(__name__)
+
+def start_interview(session_id: str) -> None:
+    """Start mock interview session."""
+    logger.info(f"Starting interview session: {session_id}")
+    try:
+        # Implementation
+        logger.debug(f"Session {session_id} initialized successfully")
+    except Exception as e:
+        logger.error(f"Failed to start session {session_id}: {e}", exc_info=True)
+        raise
+```
+
+## Dependency Management
+
+### Adding New Dependencies
+1. Check if dependency is truly needed
+2. Evaluate alternatives
+3. Add to requirements.txt with version pinning
+4. Document why dependency is needed
+5. Update PROJECT_SPEC.md if major dependency
+
+### Version Pinning
+```txt
+# requirements.txt
+streamlit==1.28.0  # UI framework
+langchain==0.1.0   # LLM orchestration
+openai>=1.0.0,<2.0.0  # Allow minor updates
+```
+
+## Git Commit Guidelines
+
+### Commit Message Format
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+### Types
+- feat: New feature
+- fix: Bug fix
+- docs: Documentation changes
+- style: Code style changes (formatting)
+- refactor: Code refactoring
+- test: Adding/updating tests
+- chore: Maintenance tasks
+
+### Examples
+```
+feat(agent): Add resume-aware problem generator
+
+Implemented LangChain agent that generates system design
+problems based on candidate's resume experience level.
+
+Closes #12
+```
+
+## AI/LLM Best Practices
+
+### Prompt Engineering
+- Store prompts in src/agent/prompts.py
+- Use template variables for dynamic content
+- Include clear instructions and examples
+- Version prompts when making significant changes
+
+```python
+# src/agent/prompts.py
+GENERATE_PROBLEM_PROMPT = """
+You are a senior FANG engineer conducting a system design interview.
+
+Candidate Background:
+{resume_summary}
+
+Generate a system design problem that:
+1. Matches the candidate's experience level
+2. Relates to their domain expertise
+3. Is appropriate for a {duration_minutes}-minute interview
+4. Covers key system design concepts
+
+Problem:
+"""
+```
+
+### LLM Error Handling
+- Always set timeouts
+- Retry with exponential backoff
+- Provide fallback responses
+- Log LLM interactions for debugging
+
+### Cost Optimization
+- Cache repeated queries
+- Use cheaper models for simple tasks
+- Implement rate limiting
+- Monitor token usage
+
+## Performance Guidelines
+
+### Optimize Critical Paths
+- Profile code before optimizing
+- Cache expensive computations
+- Use async/await for I/O operations
+- Batch database queries
+
+### Streamlit-Specific
+- Use `@st.cache_data` for expensive computations
+- Use `@st.cache_resource` for global resources
+- Minimize reruns with session state
+
+```python
+import streamlit as st
+
+@st.cache_data(ttl=3600)
+def load_user_resumes(user_id: str) -> List[dict]:
+    """Load user resumes with 1-hour cache."""
+    return db.query_resumes(user_id)
+
+@st.cache_resource
+def get_llm_client() -> ChatOpenAI:
+    """Get cached LLM client (reused across sessions)."""
+    return ChatOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+```
+
+## Security Considerations
+
+### Never Commit Sensitive Data
+- API keys in .env (gitignored)
+- Passwords in .env
+- User data samples
+
+### Input Validation
+- Validate all user inputs
+- Sanitize file uploads
+- Limit file sizes
+- Check file types
+
+### Database Security
+- Use parameterized queries
+- Implement proper access control
+- Hash sensitive data
+
+## When Making Changes
+
+### Checklist
+- [ ] Check if similar code/docs exist
+- [ ] Update existing files if applicable
+- [ ] Add/update tests
+- [ ] Update docstrings
+- [ ] Run tests locally
+- [ ] Check code coverage
+- [ ] Update PROJECT_SPEC.md if needed
+- [ ] Update README.md if needed
+- [ ] Commit with descriptive message
+
+## Quick Reference
+
+### Before Writing Code
+1. Read PROJECT_SPEC.md for context
+2. Check existing codebase for similar functionality
+3. Review this .cursorrules file
+4. Plan your approach
+
+### While Writing Code
+1. Follow style guide
+2. Add type hints
+3. Write docstrings
+4. Handle errors properly
+5. Keep functions small
+6. Think about testability
+
+### After Writing Code
+1. Write tests (aim for 80%+ coverage)
+2. Run tests and fix failures
+3. Update documentation
+4. Review your changes
+5. Commit with clear message
+
+## Remember
+- **Quality over speed**: Take time to write good code
+- **Test early, test often**: Don't wait until the end
+- **Document as you go**: Future you will thank you
+- **Ask before duplicating**: Check existing code first
+- **Keep it simple**: Simplest solution is often the best
