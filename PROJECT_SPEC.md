@@ -89,6 +89,58 @@ ai-mock-interview-platform/
 
 ---
 
+## Code Quality & Testing Guidelines
+
+**IMPORTANT**: This project includes a comprehensive `.cursorrules` file that ensures code quality, modularity, extensibility, and maintainability.
+
+### Always Check .cursorrules Before Coding
+Before writing any code, review the `.cursorrules` file in the repository root. It contains:
+
+- **Modularity Rules**: Keep functions small, single responsibility, clear separation of concerns
+- **Testing Requirements**: 80% minimum coverage, 95%+ for critical paths
+- **Code Style Standards**: PEP 8, type hints, Google-style docstrings
+- **Documentation Guidelines**: When to document, how to document
+- **Error Handling**: Proper logging, graceful failures
+- **File Organization**: When to create vs update files
+- **Git Commit Guidelines**: Conventional commits format
+- **Security Best Practices**: Never commit secrets, input validation
+
+### Key Principles from .cursorrules
+
+1. **Check Existing Code First** - Never duplicate functionality
+2. **Write Tests Immediately** - Don't wait until the end
+3. **Document As You Go** - Add docstrings and type hints
+4. **Keep It Simple** - Simplest solution is often best
+5. **Handle Errors Gracefully** - Proper logging and error messages
+
+### Testing Standards
+
+```bash
+# Run tests
+pytest tests/
+
+# Run with coverage
+pytest --cov=src --cov-report=html tests/
+
+# Coverage targets
+# - Minimum: 80% for all modules
+# - Critical paths (AI agent, DB): 95%+
+```
+
+### Code Review Checklist
+Before committing code, ensure:
+- [ ] Tests written and passing
+- [ ] Code coverage meets requirements
+- [ ] Docstrings added
+- [ ] Type hints included
+- [ ] .cursorrules guidelines followed
+- [ ] No duplicate code
+- [ ] Error handling implemented
+
+**See `.cursorrules` for complete details**
+
+
+
 ## Core Features (POC)
 
 ### 1. Resume Upload & Parsing
