@@ -1,0 +1,31 @@
+# Core Framework
+streamlit==1.29.0
+
+# AI/LLM
+langchain==0.1.0
+langchain-openai==0.0.2
+langchain-anthropic==0.0.1
+openai==1.6.1
+anthropic==0.8.1
+
+# Audio/Video
+streamlit-webrtc==0.47.1
+openai-whisper==20231117
+pyaudio==0.2.14
+
+# Drawing/Whiteboard
+streamlit-drawable-canvas==0.9.3
+
+# Database
+psycopg2-binary==2.9.9
+sqlalchemy==2.0.23
+
+# Configuration
+pyyaml==6.0.1
+python-dotenv==1.0.0
+
+# Utilities
+pillow==10.1.0
+numpy==1.26.2
+pandas==2.1.4
+PyPDF2==3.0.1

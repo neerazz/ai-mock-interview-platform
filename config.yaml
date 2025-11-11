@@ -1,0 +1,70 @@
+# AI Mock Interview Platform Configuration
+
+# AI Provider Settings
+ai_providers:
+  openai:
+    default_model: "gpt-4-turbo-preview"
+    temperature: 0.7
+    max_tokens: 2000
+    
+  anthropic:
+    default_model: "claude-3-opus-20240229"
+    temperature: 0.7
+    max_tokens: 2000
+
+# Storage Configuration
+storage:
+  data_dir: "./data"
+  sessions_dir: "./data/sessions"
+  logs_dir: "./logs"
+  max_file_size_mb: 100
+  
+# Communication Settings
+communication:
+  audio:
+    sample_rate: 16000
+    channels: 1
+    format: "wav"
+    
+  video:
+    fps: 30
+    resolution: "1280x720"
+    format: "webm"
+    
+  whiteboard:
+    canvas_width: 800
+    canvas_height: 600
+    stroke_width: 2
+    
+  screen_share:
+    fps: 10
+    format: "png"
+
+# Session Settings
+session:
+  default_duration_minutes: 45
+  max_duration_minutes: 90
+  auto_save_interval_seconds: 60
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "json"
+  console_output: true
+  file_output: true
+  database_output: true
+  max_file_size_mb: 10
+  backup_count: 5
+
+# Token Tracking
+token_tracking:
+  enabled: true
+  track_by_operation: true
+  display_costs: true
+  
+# Database Configuration
+database:
+  pool_size: 5
+  max_overflow: 10
+  pool_timeout: 30
+  pool_recycle: 3600

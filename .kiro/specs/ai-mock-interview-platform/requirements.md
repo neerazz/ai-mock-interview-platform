@@ -45,15 +45,15 @@ This document defines the requirements for a local proof-of-concept AI-powered m
 #### Acceptance Criteria
 
 1. THE Interview Platform SHALL provide audio, video, whiteboard, and screen share as Communication Mode options
-2. THE Interview Platform SHALL allow the Candidate to enable one or more Communication Modes simultaneously
-3. WHEN a Candidate provides audio input, THE Interview Platform SHALL capture audio using streamlit-webrtc
-4. WHEN a Candidate provides audio input, THE Interview Platform SHALL transcribe the audio in real-time using OpenAI Whisper
-5. WHEN a Candidate provides video input, THE Interview Platform SHALL record the video stream to Local Filesystem
-6. WHEN a Candidate provides text input, THE Interview Platform SHALL accept the text without transcription
-7. WHEN a Candidate enables screen share, THE Interview Platform SHALL capture screen content and store it to Local Filesystem
-8. THE Interview Platform SHALL send all Candidate inputs to the AI Interviewer for processing
-9. WHEN the AI Interviewer generates a response, THE Interview Platform SHALL display the response text to the Candidate
-10. THE Interview Platform SHALL store both audio recordings and transcripts to the Local Filesystem
+2. THE Interview Platform SHALL allow the Candidate to enable one or more Communication Modes simultaneously during an Interview Session
+3. WHEN a Candidate provides audio input, THE Interview Platform SHALL capture the audio stream using streamlit-webrtc
+4. WHEN a Candidate provides audio input, THE Interview Platform SHALL transcribe the audio to text within 2 seconds using OpenAI Whisper
+5. WHEN a Candidate provides video input, THE Interview Platform SHALL record the video stream to Local Filesystem in H264 format
+6. WHEN a Candidate provides text input, THE Interview Platform SHALL accept the text without transcription processing
+7. WHEN a Candidate enables screen share, THE Interview Platform SHALL capture screen content at 5 second intervals and store it to Local Filesystem
+8. WHEN the Interview Platform receives Candidate input, THE Interview Platform SHALL send the input to the AI Interviewer for processing within 500 milliseconds
+9. WHEN the AI Interviewer generates a response, THE Interview Platform SHALL display the response text to the Candidate within 1 second
+10. WHEN the Interview Platform captures audio, THE Interview Platform SHALL store both audio recordings and transcripts to the Local Filesystem
 
 ### Requirement 3
 
@@ -61,11 +61,11 @@ This document defines the requirements for a local proof-of-concept AI-powered m
 
 #### Acceptance Criteria
 
-1. THE Interview Platform SHALL provide a Whiteboard Canvas using streamlit-drawable-canvas
-2. THE Interview Platform SHALL allow the Candidate to draw, erase, and modify diagrams on the Whiteboard Canvas
-3. THE Interview Platform SHALL save Whiteboard Canvas snapshots to local filesystem storage
-4. WHEN a Candidate modifies the Whiteboard Canvas, THE Interview Platform SHALL associate the snapshot with the current Interview Session
-5. THE Interview Platform SHALL allow the Candidate to clear the Whiteboard Canvas
+1. THE Interview Platform SHALL provide a Whiteboard Canvas using streamlit-drawable-canvas with drawing, erasing, and shape tools
+2. THE Interview Platform SHALL allow the Candidate to draw, erase, and modify diagrams on the Whiteboard Canvas in real-time
+3. WHEN a Candidate saves a Whiteboard Canvas snapshot, THE Interview Platform SHALL store the snapshot as a PNG image to Local Filesystem within 1 second
+4. WHEN a Candidate saves a Whiteboard Canvas snapshot, THE Interview Platform SHALL associate the snapshot with the current Interview Session identifier
+5. WHEN a Candidate clears the Whiteboard Canvas, THE Interview Platform SHALL remove all drawing content and reset the canvas to blank state
 
 ### Requirement 4
 
@@ -125,13 +125,13 @@ This document defines the requirements for a local proof-of-concept AI-powered m
 
 #### Acceptance Criteria
 
-1. THE Interview Platform SHALL use the Database for storing session metadata and conversation history
-2. THE Interview Platform SHALL store whiteboard snapshots as image files in the Local Filesystem
-3. THE Interview Platform SHALL store audio recordings as audio files in the Local Filesystem
-4. THE Interview Platform SHALL store video recordings as video files in the Local Filesystem
-5. THE Interview Platform SHALL store screen share captures as image or video files in the Local Filesystem
-6. WHEN the Interview Platform starts, THE Interview Platform SHALL initialize the Database schema if it does not exist
-7. THE Interview Platform SHALL organize Local Filesystem storage in a structured directory hierarchy by session identifier
+1. THE Interview Platform SHALL store session metadata and conversation history in the Database
+2. THE Interview Platform SHALL store whiteboard snapshots as PNG image files in the Local Filesystem
+3. THE Interview Platform SHALL store audio recordings as WAV audio files in the Local Filesystem
+4. THE Interview Platform SHALL store video recordings as MP4 video files in the Local Filesystem
+5. THE Interview Platform SHALL store screen share captures as PNG image files in the Local Filesystem
+6. WHEN the Interview Platform starts, THE Interview Platform SHALL initialize the Database schema if the schema does not exist
+7. THE Interview Platform SHALL organize Local Filesystem storage in a directory hierarchy with session identifier as the primary folder structure
 
 ### Requirement 9
 
@@ -164,13 +164,13 @@ This document defines the requirements for a local proof-of-concept AI-powered m
 
 #### Acceptance Criteria
 
-1. THE Interview Platform SHALL organize code into distinct modules with single responsibilities
-2. THE Interview Platform SHALL use dependency injection for component dependencies
-3. THE Interview Platform SHALL define clear interfaces between modules
-4. THE Interview Platform SHALL follow SOLID principles in code design
-5. WHEN new functionality is added, THE Interview Platform SHALL extend existing interfaces rather than modify them
-6. THE Interview Platform SHALL remove unused code and dependencies during each change
-7. THE Interview Platform SHALL avoid backward compatibility concerns by maintaining simple implementations
+1. THE Interview Platform SHALL organize code into distinct modules where each module has a single responsibility
+2. THE Interview Platform SHALL use dependency injection pattern for all component dependencies
+3. THE Interview Platform SHALL define clear interfaces with documented contracts between all modules
+4. THE Interview Platform SHALL implement code design following SOLID principles including Single Responsibility, Open-Closed, Liskov Substitution, Interface Segregation, and Dependency Inversion
+5. WHEN new functionality is added, THE Interview Platform SHALL extend existing interfaces through inheritance or composition rather than modify existing interface definitions
+6. WHEN code changes are made, THE Interview Platform SHALL remove all unused code and dependencies from the affected modules
+7. THE Interview Platform SHALL maintain simple implementations without backward compatibility layers
 
 ### Requirement 12
 
@@ -178,12 +178,12 @@ This document defines the requirements for a local proof-of-concept AI-powered m
 
 #### Acceptance Criteria
 
-1. THE Interview Platform SHALL include unit tests for all business logic components
-2. THE Interview Platform SHALL include integration tests for critical user workflows
-3. THE Interview Platform SHALL achieve minimum 80 percent code coverage for core functionality
-4. THE Interview Platform SHALL include tests for error handling and edge cases
-5. WHEN a code change is made, THE Interview Platform SHALL include tests that verify the new functionality
-6. THE Interview Platform SHALL run all tests successfully before code can be merged
+1. THE Interview Platform SHALL include unit tests for all business logic components with isolated test cases
+2. THE Interview Platform SHALL include integration tests for critical user workflows including session creation, interview interaction, and evaluation generation
+3. THE Interview Platform SHALL achieve minimum 80 percent code coverage for core functionality modules
+4. THE Interview Platform SHALL include tests for error handling scenarios and edge cases for each component
+5. WHEN a code change introduces new functionality, THE Interview Platform SHALL include automated tests that verify the new functionality behavior
+6. WHEN code is submitted for merge, THE CI/CD Pipeline SHALL execute all tests and block the merge if any test fails
 
 ### Requirement 13
 
@@ -205,13 +205,13 @@ This document defines the requirements for a local proof-of-concept AI-powered m
 
 #### Acceptance Criteria
 
-1. THE Interview Platform SHALL record input tokens for every AI API call
-2. THE Interview Platform SHALL record output tokens for every AI API call
-3. THE Interview Platform SHALL calculate estimated cost for each AI API call based on provider pricing
-4. THE Interview Platform SHALL store Token Usage data in the Database with session association
-5. THE Interview Platform SHALL provide a summary of total Token Usage per Interview Session
-6. THE Interview Platform SHALL categorize Token Usage by operation type including question generation, response analysis, and evaluation
-7. WHEN an Interview Session ends, THE Interview Platform SHALL display total token count and estimated cost to the Candidate
+1. WHEN the Interview Platform makes an AI API call, THE Interview Platform SHALL record the input token count for that call
+2. WHEN the Interview Platform receives an AI API response, THE Interview Platform SHALL record the output token count for that response
+3. WHEN the Interview Platform records token usage, THE Interview Platform SHALL calculate the estimated cost in USD based on the provider pricing model
+4. WHEN the Interview Platform records token usage, THE Interview Platform SHALL store the Token Usage data in the Database with the associated Interview Session identifier
+5. THE Interview Platform SHALL provide a summary displaying total Token Usage aggregated per Interview Session
+6. THE Interview Platform SHALL categorize Token Usage by operation type including question generation, response analysis, and evaluation generation
+7. WHEN an Interview Session ends, THE Interview Platform SHALL display the total token count and estimated cost in USD to the Candidate
 
 ### Requirement 15
 
@@ -253,18 +253,18 @@ This document defines the requirements for a local proof-of-concept AI-powered m
 
 #### Acceptance Criteria
 
-1. THE Interview Platform SHALL organize code into modules with single responsibilities not exceeding 300 lines per file
-2. THE Interview Platform SHALL limit function length to maximum 50 lines
-3. THE Interview Platform SHALL limit class length to maximum 200 lines
-4. THE Interview Platform SHALL include type hints for all function signatures
-5. THE Interview Platform SHALL include docstrings in Google style for all public functions and classes
-6. THE Interview Platform SHALL follow PEP 8 style guide for Python code
-7. THE Interview Platform SHALL maintain cyclomatic complexity below 10 for all functions
-8. THE Interview Platform SHALL use dependency injection for component dependencies
-9. THE Interview Platform SHALL implement proper error handling with specific exception types
-10. THE Interview Platform SHALL validate all user inputs before processing
-11. THE Interview Platform SHALL use parameterized queries for all database operations
-12. THE Interview Platform SHALL implement retry logic with exponential backoff for transient failures
+1. THE Interview Platform SHALL organize code into modules where each module has single responsibility and contains maximum 300 lines per file
+2. THE Interview Platform SHALL limit each function implementation to maximum 50 lines of code
+3. THE Interview Platform SHALL limit each class implementation to maximum 200 lines of code
+4. THE Interview Platform SHALL include type hints for all function signatures including parameters and return types
+5. THE Interview Platform SHALL include docstrings in Google style format for all public functions and classes
+6. THE Interview Platform SHALL format all Python code following PEP 8 style guide conventions
+7. THE Interview Platform SHALL maintain cyclomatic complexity metric below 10 for all function implementations
+8. THE Interview Platform SHALL use dependency injection pattern for all component dependencies
+9. THE Interview Platform SHALL implement error handling using specific exception types for each error category
+10. WHEN the Interview Platform receives user input, THE Interview Platform SHALL validate the input against defined constraints before processing
+11. WHEN the Interview Platform executes database operations, THE Interview Platform SHALL use parameterized queries to prevent SQL injection
+12. WHEN the Interview Platform encounters transient failures, THE Interview Platform SHALL implement retry logic with exponential backoff for maximum 3 attempts
 
 ### Requirement 18
 
@@ -272,13 +272,13 @@ This document defines the requirements for a local proof-of-concept AI-powered m
 
 #### Acceptance Criteria
 
-1. THE Interview Platform SHALL display the AI Interviewer chat in the left panel of the interview interface
-2. THE Interview Platform SHALL display the Whiteboard Canvas in the center panel of the interview interface
-3. THE Interview Platform SHALL display the Transcript Display in the right panel of the interview interface
-4. THE Interview Platform SHALL display Recording Controls at the bottom of the interview interface
-5. THE Interview Platform SHALL update the Transcript Display in real-time as conversation occurs
-6. THE Interview Platform SHALL maintain consistent panel layout throughout the Interview Session
-7. THE Interview Platform SHALL provide clear visual indicators for active Communication Modes
+1. THE Interview Platform SHALL display the AI Interviewer chat interface in the left panel occupying 30 percent of the screen width
+2. THE Interview Platform SHALL display the Whiteboard Canvas in the center panel occupying 45 percent of the screen width
+3. THE Interview Platform SHALL display the Transcript Display in the right panel occupying 25 percent of the screen width
+4. THE Interview Platform SHALL display Recording Controls in a bottom bar spanning the full width of the interview interface
+5. WHEN conversation occurs, THE Interview Platform SHALL update the Transcript Display within 2 seconds with the new conversation content
+6. THE Interview Platform SHALL maintain consistent panel layout with fixed proportions throughout the Interview Session
+7. WHEN a Communication Mode is active, THE Interview Platform SHALL display a visual indicator with distinct color or icon for that mode
 
 ### Requirement 19
 

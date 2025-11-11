@@ -12,6 +12,73 @@ The AI-powered mock interview platform is a local Python application that enable
 4. **Local-First**: All data stored locally, no cloud dependencies
 5. **Testability**: Design for easy unit and integration testing
 
+### Technology Choices and Rationale
+
+**Streamlit for UI**:
+- Rapid prototyping with Python-only stack
+- Built-in components for chat, file upload, and layout
+- Easy integration with ML/AI libraries
+- No frontend JavaScript required
+- Good for POC and internal tools
+
+**PostgreSQL in Docker**:
+- Production-grade database from day one
+- Same engine used in cloud (AWS RDS, Azure Database)
+- JSONB support for flexible schema
+- Easy local setup with Docker
+- Clear migration path to cloud
+
+**LangChain for AI**:
+- Unified interface for multiple LLM providers
+- Built-in conversation memory management
+- Agent framework for complex interactions
+- Active community and good documentation
+
+**streamlit-webrtc for Audio/Video**:
+- Real-time audio capture in browser
+- No additional server infrastructure needed
+- Works within Streamlit framework
+- Supports both audio and video streams
+
+**OpenAI Whisper for Transcription**:
+- State-of-the-art accuracy
+- Fast transcription (< 2 seconds)
+- Supports multiple languages
+- Can run locally or via API
+
+### SOLID Principles Implementation
+
+The platform architecture follows SOLID principles for maintainable, extensible code:
+
+**Single Responsibility Principle (SRP)**:
+- Each component has one clear responsibility
+- SessionManager: orchestrates sessions
+- CommunicationManager: handles I/O modes
+- AIInterviewer: conducts interviews
+- EvaluationManager: generates feedback
+- No component handles multiple concerns
+
+**Open-Closed Principle (OCP)**:
+- Components are open for extension, closed for modification
+- New AI providers can be added without modifying existing code
+- New communication modes can be plugged in via interface
+- New evaluation strategies can be implemented through inheritance
+
+**Liskov Substitution Principle (LSP)**:
+- IDataStore interface allows PostgreSQL or cloud database substitution
+- Any IDataStore implementation can replace another without breaking code
+- Communication mode handlers are interchangeable
+
+**Interface Segregation Principle (ISP)**:
+- Focused interfaces with minimal methods
+- Clients depend only on methods they use
+- No "fat" interfaces with unused methods
+
+**Dependency Inversion Principle (DIP)**:
+- High-level modules depend on abstractions (interfaces), not concrete implementations
+- SessionManager depends on IDataStore interface, not PostgresDataStore
+- Enables dependency injection and testing with mocks
+
 ## Architecture
 
 ### High-Level Architecture
@@ -107,6 +174,73 @@ graph TB
 
 ## Components and Interfaces
 
+### Dependency Injection Pattern
+
+All components use dependency injection to promote testability, modularity, and loose coupling. Dependencies are injected through constructor parameters rather than created internally.
+
+**Benefits**:
+- Easy to mock dependencies for unit testing
+- Clear declaration of component dependencies
+- Flexible component composition
+- Supports interface-based programming
+
+**Example Implementation**:
+```python
+class SessionManager:
+    """Session manager with injected dependencies."""
+    
+    def __init__(
+        self,
+        data_store: IDataStore,
+        ai_interviewer: AIInterviewer,
+        evaluation_manager: EvaluationManager,
+        communication_manager: CommunicationManager,
+        logger: LoggingManager
+    ):
+        self.data_store = data_store
+        self.ai_interviewer = ai_interviewer
+        self.evaluation_manager = evaluation_manager
+        self.communication_manager = communication_manager
+        self.logger = logger
+
+# Application initialization with dependency injection
+def create_app() -> SessionManager:
+    """Factory function to wire up dependencies."""
+    # Create infrastructure components
+    data_store = PostgresDataStore(connection_string=config.database_url)
+    file_storage = FileStorage(data_dir=config.data_dir)
+    logger = LoggingManager(config=config.logging)
+    token_tracker = TokenTracker(data_store=data_store)
+    
+    # Create domain components
+    resume_manager = ResumeManager(data_store=data_store, logger=logger)
+    communication_manager = CommunicationManager(
+        file_storage=file_storage,
+        logger=logger
+    )
+    ai_interviewer = AIInterviewer(
+        config=config.ai,
+        token_tracker=token_tracker,
+        logger=logger
+    )
+    evaluation_manager = EvaluationManager(
+        data_store=data_store,
+        ai_interviewer=ai_interviewer,
+        logger=logger
+    )
+    
+    # Create session manager with all dependencies
+    session_manager = SessionManager(
+        data_store=data_store,
+        ai_interviewer=ai_interviewer,
+        evaluation_manager=evaluation_manager,
+        communication_manager=communication_manager,
+        logger=logger
+    )
+    
+    return session_manager
+```
+
 ### 1. Session Manager
 
 **Purpose**: Orchestrates interview session lifecycle and coordinates between components
@@ -146,11 +280,19 @@ class CommunicationManager:
 ```
 
 **Sub-Components**:
-- **AudioHandler**: streamlit-webrtc for audio capture with real-time transcription via OpenAI Whisper
-- **VideoHandler**: Video stream capture and storage
+- **AudioHandler**: streamlit-webrtc for audio capture with real-time transcription via OpenAI Whisper (transcription within 2 seconds)
+- **VideoHandler**: Video stream capture and storage in H264 format
 - **WhiteboardHandler**: streamlit-drawable-canvas integration for drawing system diagrams
-- **ScreenShareHandler**: Screen capture functionality
-- **TranscriptHandler**: Real-time transcript display and storage
+- **ScreenShareHandler**: Screen capture functionality with 5-second interval snapshots stored as PNG images
+- **TranscriptHandler**: Real-time transcript display and storage (updates within 2 seconds)
+
+**Design Rationale - Screen Capture Interval**:
+The 5-second capture interval for screen sharing balances several concerns:
+- **Storage efficiency**: Continuous video would consume excessive disk space
+- **Performance**: Periodic snapshots minimize CPU/memory overhead
+- **Usefulness**: 5 seconds captures meaningful changes without missing important content
+- **Review capability**: Provides sufficient granularity for post-interview analysis
+- **Cost**: Reduces AI analysis costs compared to full video processing
 
 ### 3. Resume Manager
 
@@ -982,6 +1124,19 @@ class FileStorage:
     def cleanup_session(self, session_id: str) -> None
 ```
 
+**File Format Specifications**:
+- **Audio files**: WAV format for lossless quality and compatibility
+- **Video files**: MP4 format with H264 codec for efficient storage
+- **Whiteboard snapshots**: PNG format for lossless diagram quality
+- **Screen captures**: PNG format for clarity and text readability
+- **Transcripts**: Plain text files with timestamps
+
+**Storage Organization**:
+- Each session has dedicated directory: `data/sessions/{session_id}/`
+- Media types separated into subdirectories (audio/, video/, whiteboard/, screen/)
+- Sequential numbering for multiple files of same type
+- File references stored in database media_files table
+
 ## User Interface Design
 
 ### Interview Interface Layout
@@ -1031,21 +1186,32 @@ The interview interface uses a 3-panel layout optimized for system design interv
 
 **Right Panel - Transcript (25% width)**:
 - Real-time transcription display
-- Auto-updating as speech is transcribed
+- Auto-updating as speech is transcribed (within 2 seconds)
 - Scrollable history
 - Speaker labels (Interviewer/Candidate)
 - Timestamps
 - Search functionality
 - Export transcript button
 
+**Layout Constraints**:
+- Panel proportions remain fixed throughout the session (30% / 45% / 25%)
+- No dynamic resizing or collapsing panels
+- Consistent layout provides predictable user experience
+- Bottom bar spans full width below all panels
+
 **Bottom Bar - Recording Controls**:
 - Audio recording toggle (red dot when active)
 - Video recording toggle (red dot when active)
 - Whiteboard snapshot button
-- Screen share toggle
+- Screen share toggle (visual indicator when active)
 - End interview button (with confirmation)
 - Session timer display
 - Token usage indicator
+- Visual indicators for active modes (distinct color/icon per mode)
+  - Audio: Red pulsing dot
+  - Video: Red recording icon
+  - Screen share: Green active indicator
+  - Whiteboard: Highlight when snapshot saved
 
 ### Streamlit Implementation
 
@@ -1504,6 +1670,63 @@ class DataStoreError(InterviewPlatformError):
 - Clear error messages displayed to users
 - Comprehensive logging for debugging
 
+**Retry Implementation**:
+```python
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+
+class AIInterviewer:
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=1, max=4),
+        retry=retry_if_exception_type((APIError, ConnectionError)),
+        reraise=True
+    )
+    def _call_llm_api(self, prompt: str) -> str:
+        """
+        Call LLM API with automatic retry on transient failures.
+        
+        Retry strategy:
+        - Maximum 3 attempts
+        - Exponential backoff: 1s, 2s, 4s
+        - Only retry on transient errors (API errors, connection issues)
+        - Re-raise exception after final attempt
+        """
+        try:
+            response = self.llm.generate(prompt)
+            return response
+        except Exception as e:
+            logger.error(
+                "llm_api_call_failed",
+                error=str(e),
+                retry_attempt=self._call_llm_api.retry.statistics.get("attempt_number", 0)
+            )
+            raise
+
+class PostgresDataStore:
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=1, max=4),
+        retry=retry_if_exception_type((OperationalError, InterfaceError)),
+        reraise=True
+    )
+    def _execute_query(self, query: str, params: Dict) -> Any:
+        """
+        Execute database query with automatic retry on connection failures.
+        """
+        try:
+            with self.pool.connection() as conn:
+                result = conn.execute(query, params)
+                return result
+        except Exception as e:
+            logger.error(
+                "database_query_failed",
+                query=query[:100],  # Truncate for logging
+                error=str(e),
+                retry_attempt=self._execute_query.retry.statistics.get("attempt_number", 0)
+            )
+            raise
+```
+
 ## Testing Strategy
 
 ### Unit Tests
@@ -1726,26 +1949,42 @@ def create_session(self, config: SessionConfig) -> Session:
 
 **Format**:
 ```markdown
-# ADR-001: Use SQLite for Local Data Storage
+# ADR-001: Use PostgreSQL in Docker for Local Data Storage
 
 ## Status
 Accepted
 
 ## Context
-Need local data persistence without cloud dependencies for POC.
+Need local data persistence without cloud dependencies for POC, with a clear path to cloud migration.
 
 ## Decision
-Use SQLite as the database engine.
+Use PostgreSQL running in Docker container as the database engine.
+
+## Rationale
+- PostgreSQL is production-grade and widely used in cloud environments
+- Docker containerization provides easy local setup without manual installation
+- Same database engine can be used in cloud (AWS RDS, Azure Database, Google Cloud SQL)
+- Supports JSONB for flexible schema evolution
+- Better concurrent access than SQLite
+- Repository pattern abstraction enables seamless cloud migration
 
 ## Consequences
 Positive:
-- No setup required
-- File-based, easy to backup
-- Sufficient for single-user POC
+- No code changes needed when migrating to cloud
+- Production-quality database from day one
+- Better performance and concurrency
+- Rich feature set (JSONB, full-text search, etc.)
+- Easy backup and restore with pg_dump
 
 Negative:
-- Not suitable for multi-user scenarios
-- Limited concurrent access
+- Requires Docker installation
+- Slightly more complex setup than SQLite
+- Additional container to manage
+
+## Alternatives Considered
+- SQLite: Too limited for future scaling, different engine than cloud
+- MySQL: Less feature-rich than PostgreSQL for our use case
+- MongoDB: Overkill for structured data, less mature cloud migration path
 ```
 
 ### README Structure
@@ -1979,9 +2218,11 @@ monitoring:
 **Code Organization**:
 - Follow PEP 8 style guide
 - Maximum function length: 50 lines
-- Maximum file length: 500 lines
+- Maximum class length: 200 lines
+- Maximum file length: 300 lines
 - Clear separation of concerns
 - Single Responsibility Principle
+- Cyclomatic complexity below 10 per function
 
 **Type Hints**:
 - All function signatures must have type hints
@@ -2004,7 +2245,11 @@ monitoring:
 
 **Response Times**:
 - UI interactions: < 100ms
-- AI response generation: < 5 seconds
+- Audio transcription: < 2 seconds (per audio input)
+- AI response display: < 1 second (after generation)
+- AI response processing: < 500ms (sending to AI Interviewer)
+- Whiteboard snapshot save: < 1 second
+- Transcript display update: < 2 seconds
 - Database queries: < 100ms
 - File operations: < 500ms
 
@@ -2030,10 +2275,15 @@ monitoring:
 - Data validation at boundaries
 
 **Fault Tolerance**:
-- Retry logic for transient failures (3 attempts with exponential backoff)
+- Retry logic for transient failures (maximum 3 attempts with exponential backoff)
+  - First retry: 1 second delay
+  - Second retry: 2 seconds delay
+  - Third retry: 4 seconds delay
+  - Applied to: AI API calls, database operations, file operations
 - Circuit breaker for external APIs
 - Graceful degradation when services unavailable
 - Auto-recovery from connection failures
+- Clear error messages for non-recoverable failures
 
 **Availability**:
 - Database health checks every 30 seconds
@@ -2124,11 +2374,14 @@ logger.error(
    - Encryption at rest (future consideration)
 
 3. **Input Validation**
-   - Sanitize all user inputs
+   - Sanitize all user inputs before processing
    - Validate file uploads (type, size, content)
    - Limit file sizes (audio: 100MB, video: 500MB)
-   - SQL injection prevention (parameterized queries)
+   - SQL injection prevention (parameterized queries for all database operations)
    - Path traversal prevention
+   - Validate session configuration before starting interview
+   - Validate API credentials before use
+   - Input validation at system boundaries before processing
 
 4. **Rate Limiting**
    - Limit API calls to prevent abuse
