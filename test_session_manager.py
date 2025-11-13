@@ -445,5 +445,216 @@ def test_resume_session(session_manager, sample_session_config):
     assert session_manager._active_session_id == session_id
 
 
+def test_pause_session_not_active(session_manager, sample_session_config):
+    """Test pausing a session that is not active."""
+    # Arrange
+    session_id = str(uuid.uuid4())
+    session = Session(
+        id=session_id,
+        user_id="test_user_123",
+        created_at=datetime.now(),
+        ended_at=datetime.now(),
+        status=SessionStatus.COMPLETED,
+        config=sample_session_config,
+        metadata={},
+    )
+
+    session_manager.data_store.get_session.return_value = session
+
+    # Act & Assert
+    with pytest.raises(InterviewPlatformError, match="Cannot pause session"):
+        session_manager.pause_session(session_id)
+
+
+def test_resume_session_not_paused(session_manager, sample_session_config):
+    """Test resuming a session that is not paused."""
+    # Arrange
+    session_id = str(uuid.uuid4())
+    session = Session(
+        id=session_id,
+        user_id="test_user_123",
+        created_at=datetime.now(),
+        ended_at=None,
+        status=SessionStatus.ACTIVE,
+        config=sample_session_config,
+        metadata={},
+    )
+
+    session_manager.data_store.get_session.return_value = session
+
+    # Act & Assert
+    with pytest.raises(InterviewPlatformError, match="Cannot resume session"):
+        session_manager.resume_session(session_id)
+
+
+def test_state_transition_active_to_completed(session_manager, sample_session_config):
+    """Test complete state transition from ACTIVE to COMPLETED."""
+    # Arrange
+    session_id = str(uuid.uuid4())
+    session = Session(
+        id=session_id,
+        user_id="test_user_123",
+        created_at=datetime.now(),
+        ended_at=None,
+        status=SessionStatus.ACTIVE,
+        config=sample_session_config,
+        metadata={},
+    )
+
+    session_manager.data_store.get_session.return_value = session
+    session_manager._active_session_id = session_id
+    
+    mock_evaluation = Mock(spec=EvaluationReport)
+    mock_evaluation.overall_score = 85.0
+    session_manager.evaluation_manager.generate_evaluation.return_value = mock_evaluation
+
+    # Act
+    evaluation = session_manager.end_session(session_id)
+
+    # Assert - Verify state transition
+    saved_session = session_manager.data_store.save_session.call_args[0][0]
+    assert saved_session.status == SessionStatus.COMPLETED
+    assert saved_session.ended_at is not None
+    assert session_manager._active_session_id is None
+
+
+def test_state_transition_active_to_paused_to_active(session_manager, sample_session_config):
+    """Test state transition from ACTIVE to PAUSED and back to ACTIVE."""
+    # Arrange
+    session_id = str(uuid.uuid4())
+    active_session = Session(
+        id=session_id,
+        user_id="test_user_123",
+        created_at=datetime.now(),
+        ended_at=None,
+        status=SessionStatus.ACTIVE,
+        config=sample_session_config,
+        metadata={},
+    )
+
+    # First call returns active session for pause
+    session_manager.data_store.get_session.return_value = active_session
+
+    # Act - Pause
+    session_manager.pause_session(session_id)
+
+    # Assert - Verify paused state
+    saved_session = session_manager.data_store.save_session.call_args[0][0]
+    assert saved_session.status == SessionStatus.PAUSED
+
+    # Arrange - Update session to paused for resume
+    paused_session = Session(
+        id=session_id,
+        user_id="test_user_123",
+        created_at=datetime.now(),
+        ended_at=None,
+        status=SessionStatus.PAUSED,
+        config=sample_session_config,
+        metadata={},
+    )
+    session_manager.data_store.get_session.return_value = paused_session
+
+    # Act - Resume
+    session_manager.resume_session(session_id)
+
+    # Assert - Verify active state
+    saved_session = session_manager.data_store.save_session.call_args_list[-1][0][0]
+    assert saved_session.status == SessionStatus.ACTIVE
+    assert session_manager._active_session_id == session_id
+
+
+def test_session_persistence_on_create(session_manager, sample_session_config):
+    """Test that session is persisted immediately on creation."""
+    # Act
+    session = session_manager.create_session(sample_session_config)
+
+    # Assert - Verify persistence
+    session_manager.data_store.save_session.assert_called_once()
+    saved_session = session_manager.data_store.save_session.call_args[0][0]
+    assert saved_session.id == session.id
+    assert saved_session.user_id == session.user_id
+    assert saved_session.status == SessionStatus.ACTIVE
+
+
+def test_session_persistence_on_end(session_manager, sample_session_config):
+    """Test that session is persisted with updated state on end."""
+    # Arrange
+    session_id = str(uuid.uuid4())
+    session = Session(
+        id=session_id,
+        user_id="test_user_123",
+        created_at=datetime.now(),
+        ended_at=None,
+        status=SessionStatus.ACTIVE,
+        config=sample_session_config,
+        metadata={},
+    )
+
+    session_manager.data_store.get_session.return_value = session
+    session_manager._active_session_id = session_id
+    
+    mock_evaluation = Mock(spec=EvaluationReport)
+    mock_evaluation.overall_score = 85.0
+    session_manager.evaluation_manager.generate_evaluation.return_value = mock_evaluation
+
+    # Act
+    session_manager.end_session(session_id)
+
+    # Assert - Verify persistence with updated state
+    session_manager.data_store.save_session.assert_called()
+    saved_session = session_manager.data_store.save_session.call_args[0][0]
+    assert saved_session.status == SessionStatus.COMPLETED
+    assert saved_session.ended_at is not None
+
+
+def test_multiple_sessions_lifecycle(session_manager, sample_session_config):
+    """Test managing multiple sessions through their lifecycle."""
+    # Create first session
+    session1 = session_manager.create_session(sample_session_config)
+    assert session1.status == SessionStatus.ACTIVE
+
+    # Create second session
+    session2 = session_manager.create_session(sample_session_config)
+    assert session2.status == SessionStatus.ACTIVE
+
+    # Verify both sessions were persisted
+    assert session_manager.data_store.save_session.call_count == 2
+
+    # Verify sessions have different IDs
+    assert session1.id != session2.id
+
+
+def test_end_session_clears_communication_modes(session_manager, sample_session_config):
+    """Test that ending a session disables all communication modes."""
+    # Arrange
+    session_id = str(uuid.uuid4())
+    session = Session(
+        id=session_id,
+        user_id="test_user_123",
+        created_at=datetime.now(),
+        ended_at=None,
+        status=SessionStatus.ACTIVE,
+        config=sample_session_config,
+        metadata={},
+    )
+
+    session_manager.data_store.get_session.return_value = session
+    session_manager._active_session_id = session_id
+    
+    # Mock enabled modes
+    enabled_modes = [CommunicationMode.TEXT, CommunicationMode.WHITEBOARD]
+    session_manager.communication_manager.get_enabled_modes.return_value = enabled_modes
+    
+    mock_evaluation = Mock(spec=EvaluationReport)
+    mock_evaluation.overall_score = 85.0
+    session_manager.evaluation_manager.generate_evaluation.return_value = mock_evaluation
+
+    # Act
+    session_manager.end_session(session_id)
+
+    # Assert - Verify all modes were disabled
+    assert session_manager.communication_manager.disable_mode.call_count == len(enabled_modes)
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

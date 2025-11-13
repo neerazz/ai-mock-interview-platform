@@ -6,6 +6,8 @@ import streamlit as st
 from src.app_factory import create_app
 from src.ui.pages.setup import render_setup_page
 from src.ui.pages.interview import render_interview_page
+from src.ui.pages.evaluation import render_evaluation_page
+from src.ui.pages.history import render_history_page
 
 
 def main():
@@ -84,17 +86,17 @@ def main():
             components["config"]
         )
     elif st.session_state.current_page == "evaluation":
-        st.title("📊 Evaluation")
-        st.info("Evaluation display will be implemented in task 13")
-        if st.button("← Back to Setup"):
-            st.session_state.current_page = "setup"
-            st.rerun()
+        render_evaluation_page(
+            components["session_manager"],
+            components["evaluation_manager"],
+            components["config"]
+        )
     elif st.session_state.current_page == "history":
-        st.title("📈 Session History")
-        st.info("Session history will be implemented in task 14")
-        if st.button("← Back to Setup"):
-            st.session_state.current_page = "setup"
-            st.rerun()
+        render_history_page(
+            components["session_manager"],
+            components["evaluation_manager"],
+            components["config"]
+        )
 
 
 if __name__ == "__main__":

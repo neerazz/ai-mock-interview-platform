@@ -27,6 +27,12 @@ def render_setup_page(resume_manager, session_manager, config):
     st.title("🎯 Interview Setup")
     st.write("Configure your interview session and upload your resume")
     
+    # Check if we should load configuration from a previous session
+    if "resume_from_session_id" in st.session_state and st.session_state.resume_from_session_id:
+        load_session_configuration(st.session_state.resume_from_session_id, session_manager, resume_manager)
+        # Clear the flag after loading
+        st.session_state.resume_from_session_id = None
+    
     # Initialize session state
     if "resume_data" not in st.session_state:
         st.session_state.resume_data = None
@@ -366,3 +372,47 @@ def render_start_interview_button(session_manager, config):
                 
             except Exception as e:
                 st.error(f"❌ Failed to create session: {str(e)}")
+
+
+
+def load_session_configuration(session_id: str, session_manager, resume_manager):
+    """
+    Load configuration from a previous session.
+    
+    Loads the AI provider, communication modes, and resume data from a previous
+    session to allow the user to start a new interview with the same settings.
+    
+    Requirements: 7.4
+    
+    Args:
+        session_id: Session identifier to load configuration from
+        session_manager: SessionManager instance
+        resume_manager: ResumeManager instance
+    """
+    try:
+        # Load the previous session
+        session = session_manager.get_session(session_id)
+        
+        if not session:
+            st.error(f"❌ Could not load session {session_id}")
+            return
+        
+        # Load AI provider configuration
+        st.session_state.ai_provider = session.config.ai_provider
+        st.session_state.ai_model = session.config.ai_model
+        
+        # Load communication modes
+        st.session_state.enabled_modes = session.config.enabled_modes
+        
+        # Load resume data if available
+        if session.config.resume_data:
+            st.session_state.resume_data = session.config.resume_data
+            st.session_state.resume_uploaded = True
+            st.session_state.user_id = session.config.resume_data.user_id
+        
+        # Show success message
+        st.success(f"✅ Configuration loaded from session {session_id[:8]}...")
+        st.info("📋 Review the configuration below and click 'Start Interview' when ready")
+        
+    except Exception as e:
+        st.error(f"❌ Failed to load session configuration: {str(e)}")

@@ -10,8 +10,7 @@ import sys
 from datetime import datetime
 from unittest.mock import Mock, MagicMock, patch
 
-# Test without importing EvaluationManager directly to avoid langchain import issues
-# We'll test the structure and logic separately
+from src.evaluation.evaluation_manager import EvaluationManager
 from src.models import (
     Session,
     SessionConfig,

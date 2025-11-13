@@ -1,5 +1,11 @@
 # AI Mock Interview Platform
 
+[![CI](https://github.com/YOUR_USERNAME/ai-mock-interview-platform/workflows/CI/badge.svg)](https://github.com/YOUR_USERNAME/ai-mock-interview-platform/actions)
+[![codecov](https://codecov.io/gh/YOUR_USERNAME/ai-mock-interview-platform/branch/main/graph/badge.svg)](https://codecov.io/gh/YOUR_USERNAME/ai-mock-interview-platform)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Type checked: mypy](https://img.shields.io/badge/type%20checked-mypy-blue.svg)](http://mypy-lang.org/)
+
 A local proof-of-concept AI-powered mock interview platform focused on System Design interviews. Practice system design interviews with an AI interviewer that provides real-time feedback and comprehensive evaluation.
 
 ## Features
@@ -192,6 +198,46 @@ pytest tests/
 # Run with coverage
 pytest --cov=src tests/
 ```
+
+### Code Quality and Pre-commit Hooks
+
+This project uses pre-commit hooks to ensure code quality. The hooks run automatically before each commit to check:
+- Code formatting (black)
+- Linting (ruff)
+- Type checking (mypy)
+- Import sorting (isort)
+- Trailing whitespace and file endings
+
+**Setup pre-commit hooks:**
+
+```bash
+# Install pre-commit (included in requirements-dev.txt)
+pip install -r requirements-dev.txt
+
+# Install the git hooks
+pre-commit install
+
+# (Optional) Run hooks manually on all files
+pre-commit run --all-files
+```
+
+**Manual code quality checks:**
+
+```bash
+# Format code with black
+black src/ tests/
+
+# Lint with ruff
+ruff check src/ tests/ --fix
+
+# Type check with mypy
+mypy src/
+
+# Sort imports with isort
+isort src/ tests/
+```
+
+The CI pipeline automatically runs all these checks on every push and pull request.
 
 ## Troubleshooting
 
