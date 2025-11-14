@@ -57,7 +57,7 @@ This will execute all validation scripts in sequence and provide a comprehensive
 
 **Run:**
 ```bash
-python validate_e2e_workflow.py
+python scripts/validate_e2e_workflow.py
 ```
 
 **Expected output:**
@@ -84,7 +84,7 @@ python validate_e2e_workflow.py
 
 **Run:**
 ```bash
-python validate_error_scenarios.py
+python scripts/validate_error_scenarios.py
 ```
 
 **Expected output:**
@@ -114,7 +114,7 @@ python validate_error_scenarios.py
 
 **Run:**
 ```bash
-python validate_docker_deployment.py
+python scripts/validate_docker_deployment.py
 ```
 
 **Expected output:**
@@ -147,7 +147,7 @@ python validate_docker_deployment.py
 
 **Run:**
 ```bash
-python validate_performance.py
+python scripts/validate_performance.py
 ```
 
 **Expected output:**
@@ -180,7 +180,7 @@ python validate_performance.py
 
 **Run:**
 ```bash
-python validate_ui_ux.py
+python scripts/validate_ui_ux.py
 ```
 
 **Expected output:**
@@ -221,7 +221,7 @@ Error: OPENAI_API_KEY not set
 ```
 **Solution:** Create a `.env` file with required variables:
 ```bash
-cp .env.template .env
+cp config/.env.template .env
 # Edit .env and add your API keys
 ```
 
@@ -312,14 +312,14 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Run UI/UX validation
-        run: python validate_ui_ux.py
+        run: python scripts/validate_ui_ux.py
       - name: Run error scenarios validation
-        run: python validate_error_scenarios.py
+        run: python scripts/validate_error_scenarios.py
       - name: Run E2E validation
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: python validate_e2e_workflow.py
+        run: python scripts/validate_e2e_workflow.py
 ```
 
 ## Validation Metrics

@@ -10,8 +10,8 @@ echo "Starting AI Mock Interview Platform..."
 if [ ! -f .env ]; then
     echo "Error: .env file not found!"
     echo "Please create .env file with required environment variables."
-    echo "You can use .env.template as a starting point:"
-    echo "  cp .env.template .env"
+    echo "You can use config/.env.template as a starting point:"
+    echo "  cp config/.env.template .env"
     echo "Then edit .env with your actual values."
     exit 1
 fi

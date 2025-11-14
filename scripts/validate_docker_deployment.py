@@ -100,7 +100,7 @@ def check_env_file() -> bool:
     env_file = Path(".env")
     if not env_file.exists():
         print_error(".env file not found")
-        print_info("Please create .env file from .env.template")
+        print_info("Please create .env file from config/.env.template")
         return False
     
     print_success(".env file found")

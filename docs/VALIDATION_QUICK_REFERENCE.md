@@ -4,14 +4,14 @@
 
 ```bash
 # Run all validations
-python run_all_validations.py
+python scripts/run_all_validations.py
 
 # Run individual validations
-python validate_e2e_workflow.py        # E2E workflow (requires API)
-python validate_error_scenarios.py     # Error handling (no API needed)
-python validate_docker_deployment.py   # Docker deployment (requires Docker)
-python validate_performance.py         # Performance (requires API)
-python validate_ui_ux.py              # UI/UX (no API needed)
+python scripts/validate_e2e_workflow.py        # E2E workflow (requires API)
+python scripts/validate_error_scenarios.py     # Error handling (no API needed)
+python scripts/validate_docker_deployment.py   # Docker deployment (requires Docker)
+python scripts/validate_performance.py         # Performance (requires API)
+python scripts/validate_ui_ux.py              # UI/UX (no API needed)
 ```
 
 ## Prerequisites Checklist
@@ -75,7 +75,7 @@ python validate_ui_ux.py              # UI/UX (no API needed)
 ```yaml
 # Add to .github/workflows/ci.yml
 - name: Run Validations
-  run: python run_all_validations.py
+  run: python scripts/run_all_validations.py
   env:
     OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
     DATABASE_URL: ${{ secrets.DATABASE_URL }}

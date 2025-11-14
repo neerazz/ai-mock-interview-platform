@@ -35,7 +35,7 @@ git clone <repository-url>
 cd ai-mock-interview-platform
 
 # Copy environment template
-cp .env.template .env
+cp config/.env.template .env
 
 # Edit .env with your API keys
 # Required: DB_PASSWORD, OPENAI_API_KEY

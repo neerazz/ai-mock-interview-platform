@@ -108,3 +108,40 @@ jobs:
       run: |
         mypy src/ --ignore-missing-imports --no-error-summary
       continue-on-error: false
+
+  documentation-validation:
+    name: Documentation Validation
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Validate documentation
+      run: |
+        python scripts/validate_documentation.py
+      continue-on-error: false
+    
+    - name: Check documentation on file changes
+      if: github.event_name == 'pull_request'
+      run: |
+        # Get list of changed files
+        git fetch origin ${{ github.base_ref }}
+        CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+        
+        # Check if documentation files were changed
+        if echo "$CHANGED_FILES" | grep -qE '^docs/.*\.md$'; then
+          echo "Documentation files changed, running validation..."
+          python scripts/validate_documentation.py
+        else
+          echo "No documentation files changed, skipping validation"
+        fi
+      shell: bash

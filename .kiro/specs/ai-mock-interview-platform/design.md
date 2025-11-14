@@ -2972,3 +2972,1745 @@ ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
 - Implement caching for repeated queries
 - Compress and archive old sessions
 - Use spot instances for non-production environments
+
+
+## Documentation Architecture (Requirements 20-21)
+
+### End-User Documentation (Requirement 20)
+
+**Quick Start Guide for Non-Technical Users**
+
+The Quick Start Guide is designed for users with no technical background, providing step-by-step instructions with screenshots and plain language.
+
+**Location**: `docs/user-guide/quick-start.md`
+
+**Structure**:
+1. **Welcome** - Brief introduction (2-3 sentences)
+2. **What You'll Need** - Simple checklist with download links
+3. **Installation Steps** - Numbered steps with screenshots
+4. **First Interview** - Walkthrough with images
+5. **Troubleshooting** - Common issues with solutions
+6. **Getting Help** - Support resources
+
+**Key Features**:
+- No technical jargon (avoid terms like "Docker", "PostgreSQL", "API")
+- Use simple language ("download", "install", "click", "type")
+- Screenshots for every step
+- Estimated time for each step
+- Success indicators ("You should see...")
+- Clear error messages with fixes
+
+**Example Content Structure**:
+```markdown
+# Quick Start Guide
+
+Welcome! This guide will help you start practicing interviews in about 10 minutes.
+
+## What You'll Need
+
+Before starting, download these free programs:
+- [ ] Docker Desktop - [Download here](link) (5 minutes to install)
+- [ ] Your OpenAI API key - [Get one here](link) (2 minutes to create)
+
+## Step 1: Download the Interview Platform (2 minutes)
+
+1. Click this link: [Download Interview Platform](link)
+2. Save the file to your Downloads folder
+3. Double-click the downloaded file to extract it
+4. You should see a folder called "ai-mock-interview-platform"
+
+[Screenshot showing the folder]
+
+## Step 2: Install Docker Desktop (5 minutes)
+
+1. Open the Docker Desktop installer you downloaded
+2. Click "Next" through the installation wizard
+3. Wait for installation to complete (about 3 minutes)
+4. Click "Finish" and restart your computer if prompted
+
+[Screenshot of Docker Desktop running]
+
+✅ Success: You should see a whale icon in your taskbar
+
+## Step 3: Get Your API Key (2 minutes)
+
+...
+```
+
+
+**Startup Validation Script**
+
+A user-friendly script that checks all prerequisites and provides clear feedback:
+
+**Location**: `scripts/validate_setup.py`
+
+```python
+"""
+Startup validation script for non-technical users.
+Checks all dependencies and provides clear, actionable feedback.
+"""
+
+import sys
+import subprocess
+from typing import List, Tuple
+
+class ValidationResult:
+    def __init__(self, name: str, passed: bool, message: str, fix: str = ""):
+        self.name = name
+        self.passed = passed
+        self.message = message
+        self.fix = fix
+
+def check_docker() -> ValidationResult:
+    """Check if Docker is installed and running."""
+    try:
+        result = subprocess.run(
+            ["docker", "--version"],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        if result.returncode == 0:
+            return ValidationResult(
+                "Docker Installation",
+                True,
+                f"✅ Docker is installed: {result.stdout.strip()}"
+            )
+    except Exception:
+        pass
+    
+    return ValidationResult(
+        "Docker Installation",
+        False,
+        "❌ Docker is not installed or not running",
+        "Please install Docker Desktop from: https://www.docker.com/products/docker-desktop"
+    )
+
+def check_env_file() -> ValidationResult:
+    """Check if .env file exists and has required variables."""
+    import os
+    from pathlib import Path
+    
+    env_path = Path(".env")
+    if not env_path.exists():
+        return ValidationResult(
+            "Configuration File",
+            False,
+            "❌ Configuration file (.env) not found",
+            "Run: cp .env.template .env\nThen edit .env and add your API keys"
+        )
+    
+    # Check for required variables
+    with open(env_path) as f:
+        content = f.read()
+    
+    required = ["DB_PASSWORD", "OPENAI_API_KEY"]
+    missing = [var for var in required if f"{var}=" not in content or f"{var}=your_" in content]
+    
+    if missing:
+        return ValidationResult(
+            "Configuration File",
+            False,
+            f"❌ Missing or incomplete configuration: {', '.join(missing)}",
+            f"Edit .env file and set: {', '.join(missing)}"
+        )
+    
+    return ValidationResult(
+        "Configuration File",
+        True,
+        "✅ Configuration file is complete"
+    )
+
+def print_results(results: List[ValidationResult]):
+    """Print validation results in a user-friendly format."""
+    print("\n" + "="*60)
+    print("  SETUP VALIDATION RESULTS")
+    print("="*60 + "\n")
+    
+    all_passed = True
+    for result in results:
+        print(f"{result.message}")
+        if not result.passed:
+            all_passed = False
+            if result.fix:
+                print(f"   How to fix: {result.fix}")
+        print()
+    
+    print("="*60)
+    if all_passed:
+        print("✅ All checks passed! You're ready to start.")
+        print("\nNext step: Run ./startup.sh to start the platform")
+    else:
+        print("❌ Some checks failed. Please fix the issues above.")
+        print("\nNeed help? Check docs/user-guide/troubleshooting.md")
+    print("="*60 + "\n")
+    
+    return all_passed
+
+if __name__ == "__main__":
+    results = [
+        check_docker(),
+        check_env_file(),
+        # Add more checks as needed
+    ]
+    
+    success = print_results(results)
+    sys.exit(0 if success else 1)
+```
+
+
+### Developer Documentation (Requirement 21)
+
+**Developer Setup Guide**
+
+Comprehensive guide for new developers to get started without pain points.
+
+**Location**: `docs/developer-guide/setup.md`
+
+**Structure**:
+1. **Prerequisites** - Exact versions required
+2. **Environment Setup** - Step-by-step with validation
+3. **IDE Configuration** - Recommended settings and extensions
+4. **Running Locally** - Development workflow
+5. **Debugging** - Breakpoint setup and troubleshooting
+6. **Architecture Overview** - High-level component diagram
+7. **Common Workflows** - Feature development, bug fixing
+8. **Testing** - Running and writing tests
+
+**Automated Setup Script**
+
+**Location**: `scripts/dev_setup.sh`
+
+```bash
+#!/bin/bash
+# Automated development environment setup
+
+set -e
+
+echo "🚀 Setting up development environment..."
+
+# Check Python version
+python_version=$(python3 --version | cut -d' ' -f2)
+required_version="3.10"
+
+if [ "$(printf '%s\n' "$required_version" "$python_version" | sort -V | head -n1)" != "$required_version" ]; then
+    echo "❌ Python 3.10+ required. Found: $python_version"
+    exit 1
+fi
+echo "✅ Python version: $python_version"
+
+# Create virtual environment
+if [ ! -d "venv" ]; then
+    echo "📦 Creating virtual environment..."
+    python3 -m venv venv
+fi
+
+# Activate virtual environment
+source venv/bin/activate
+
+# Upgrade pip
+echo "📦 Upgrading pip..."
+pip install --upgrade pip
+
+# Install dependencies
+echo "📦 Installing dependencies..."
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+
+# Install pre-commit hooks
+echo "🔧 Installing pre-commit hooks..."
+pre-commit install
+
+# Create necessary directories
+echo "📁 Creating directories..."
+mkdir -p data/sessions logs config
+
+# Copy environment template
+if [ ! -f ".env" ]; then
+    echo "📝 Creating .env file..."
+    cp .env.template .env
+    echo "⚠️  Please edit .env and add your API keys"
+fi
+
+# Start PostgreSQL
+echo "🐘 Starting PostgreSQL..."
+docker-compose up -d postgres
+
+# Wait for PostgreSQL
+echo "⏳ Waiting for PostgreSQL..."
+until docker exec interview_platform_db pg_isready -U interview_user 2>/dev/null; do
+    sleep 1
+done
+echo "✅ PostgreSQL is ready"
+
+# Run validation
+echo "🔍 Validating setup..."
+python scripts/validate_dev_setup.py
+
+echo ""
+echo "✅ Development environment setup complete!"
+echo ""
+echo "Next steps:"
+echo "  1. Edit .env and add your API keys"
+echo "  2. Run: source venv/bin/activate"
+echo "  3. Run: streamlit run src/main.py"
+echo ""
+```
+
+
+**Development Environment Validation Script**
+
+**Location**: `scripts/validate_dev_setup.py`
+
+```python
+"""
+Validates development environment configuration.
+Checks all tools, dependencies, and configurations needed for development.
+"""
+
+import sys
+import subprocess
+from pathlib import Path
+from typing import List
+
+def check_python_version() -> bool:
+    """Check Python version is 3.10+"""
+    version = sys.version_info
+    if version.major == 3 and version.minor >= 10:
+        print(f"✅ Python {version.major}.{version.minor}.{version.micro}")
+        return True
+    print(f"❌ Python 3.10+ required, found {version.major}.{version.minor}")
+    return False
+
+def check_docker() -> bool:
+    """Check Docker is installed and running"""
+    try:
+        result = subprocess.run(["docker", "ps"], capture_output=True, timeout=5)
+        if result.returncode == 0:
+            print("✅ Docker is running")
+            return True
+    except Exception:
+        pass
+    print("❌ Docker is not running")
+    return False
+
+def check_virtual_env() -> bool:
+    """Check if running in virtual environment"""
+    if hasattr(sys, 'real_prefix') or (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix):
+        print("✅ Virtual environment activated")
+        return True
+    print("⚠️  Not in virtual environment (recommended)")
+    return True  # Warning, not error
+
+def check_dependencies() -> bool:
+    """Check required packages are installed"""
+    required = ["streamlit", "openai", "anthropic", "psycopg2", "pytest"]
+    missing = []
+    for package in required:
+        try:
+            __import__(package)
+        except ImportError:
+            missing.append(package)
+    
+    if not missing:
+        print(f"✅ All required packages installed")
+        return True
+    print(f"❌ Missing packages: {', '.join(missing)}")
+    print("   Run: pip install -r requirements.txt")
+    return False
+
+def check_pre_commit() -> bool:
+    """Check pre-commit hooks are installed"""
+    git_hooks = Path(".git/hooks/pre-commit")
+    if git_hooks.exists():
+        print("✅ Pre-commit hooks installed")
+        return True
+    print("⚠️  Pre-commit hooks not installed")
+    print("   Run: pre-commit install")
+    return True  # Warning, not error
+
+def check_database() -> bool:
+    """Check PostgreSQL is accessible"""
+    try:
+        result = subprocess.run(
+            ["docker", "exec", "interview_platform_db", "pg_isready", "-U", "interview_user"],
+            capture_output=True,
+            timeout=5
+        )
+        if result.returncode == 0:
+            print("✅ PostgreSQL is accessible")
+            return True
+    except Exception:
+        pass
+    print("❌ PostgreSQL is not accessible")
+    print("   Run: docker-compose up -d postgres")
+    return False
+
+def main():
+    print("\n" + "="*60)
+    print("  DEVELOPMENT ENVIRONMENT VALIDATION")
+    print("="*60 + "\n")
+    
+    checks = [
+        check_python_version(),
+        check_docker(),
+        check_virtual_env(),
+        check_dependencies(),
+        check_pre_commit(),
+        check_database(),
+    ]
+    
+    print("\n" + "="*60)
+    if all(checks):
+        print("✅ Development environment is ready!")
+    else:
+        print("❌ Some checks failed. Fix issues above.")
+    print("="*60 + "\n")
+    
+    return 0 if all(checks) else 1
+
+if __name__ == "__main__":
+    sys.exit(main())
+```
+
+
+## Project Structure Organization (Requirement 22)
+
+### Directory Structure
+
+Clean, organized structure with clear separation of concerns:
+
+```
+ai-mock-interview-platform/
+├── README.md                          # Project overview and quick links
+├── LICENSE                            # License file
+├── .gitignore                         # Git ignore rules
+├── .env.template                      # Environment variable template
+├── docker-compose.yml                 # Docker services configuration
+├── requirements.txt                   # Production dependencies
+├── requirements-dev.txt               # Development dependencies
+├── pyproject.toml                     # Python project configuration
+├── .pre-commit-config.yaml           # Pre-commit hooks configuration
+│
+├── src/                              # Source code (all application code)
+│   ├── __init__.py
+│   ├── main.py                       # Streamlit entry point
+│   ├── config.py                     # Configuration management
+│   │
+│   ├── core/                         # Core business logic
+│   │   ├── __init__.py
+│   │   ├── session_manager.py
+│   │   ├── ai_interviewer.py
+│   │   ├── evaluation_manager.py
+│   │   └── resume_manager.py
+│   │
+│   ├── communication/                # Communication modes
+│   │   ├── __init__.py
+│   │   ├── communication_manager.py
+│   │   ├── audio_handler.py
+│   │   ├── video_handler.py
+│   │   ├── whiteboard_handler.py
+│   │   └── screen_share_handler.py
+│   │
+│   ├── storage/                      # Data persistence
+│   │   ├── __init__.py
+│   │   ├── data_store.py            # Abstract interface
+│   │   ├── postgres_store.py        # PostgreSQL implementation
+│   │   └── file_storage.py          # File system storage
+│   │
+│   ├── monitoring/                   # Logging and metrics
+│   │   ├── __init__.py
+│   │   ├── logging_manager.py
+│   │   ├── token_tracker.py
+│   │   └── metrics_collector.py
+│   │
+│   ├── ui/                           # UI components
+│   │   ├── __init__.py
+│   │   ├── interview_interface.py
+│   │   ├── resume_upload.py
+│   │   ├── session_history.py
+│   │   └── evaluation_display.py
+│   │
+│   └── utils/                        # Utility functions
+│       ├── __init__.py
+│       ├── validators.py
+│       ├── formatters.py
+│       └── exceptions.py
+│
+├── tests/                            # All test files
+│   ├── __init__.py
+│   ├── conftest.py                   # Pytest configuration and fixtures
+│   │
+│   ├── unit/                         # Unit tests (mirror src structure)
+│   │   ├── __init__.py
+│   │   ├── core/
+│   │   │   ├── test_session_manager.py
+│   │   │   ├── test_ai_interviewer.py
+│   │   │   └── test_evaluation_manager.py
+│   │   ├── communication/
+│   │   │   └── test_communication_manager.py
+│   │   └── storage/
+│   │       └── test_postgres_store.py
+│   │
+│   ├── integration/                  # Integration tests
+│   │   ├── __init__.py
+│   │   ├── test_interview_workflow.py
+│   │   ├── test_database_integration.py
+│   │   └── test_ai_provider_integration.py
+│   │
+│   └── e2e/                          # End-to-end tests
+│       ├── __init__.py
+│       └── test_complete_interview.py
+│
+├── docs/                             # All documentation
+│   ├── index.md                      # Documentation homepage
+│   │
+│   ├── user-guide/                   # End-user documentation
+│   │   ├── quick-start.md
+│   │   ├── using-the-platform.md
+│   │   ├── troubleshooting.md
+│   │   └── faq.md
+│   │
+│   ├── developer-guide/              # Developer documentation
+│   │   ├── setup.md
+│   │   ├── architecture.md
+│   │   ├── contributing.md
+│   │   ├── code-standards.md
+│   │   ├── testing-guide.md
+│   │   └── debugging.md
+│   │
+│   ├── api/                          # API documentation
+│   │   ├── session-manager.md
+│   │   ├── ai-interviewer.md
+│   │   └── data-store.md
+│   │
+│   ├── adr/                          # Architecture Decision Records
+│   │   ├── 001-postgresql-docker.md
+│   │   ├── 002-streamlit-ui.md
+│   │   └── 003-langchain-integration.md
+│   │
+│   └── implementation-notes/         # Implementation details
+│       ├── resume-parsing.md
+│       ├── token-tracking.md
+│       └── error-handling.md
+│
+├── scripts/                          # Utility scripts
+│   ├── startup.sh                    # Application startup
+│   ├── dev_setup.sh                  # Development setup
+│   ├── validate_setup.py             # Setup validation
+│   ├── validate_dev_setup.py         # Dev environment validation
+│   ├── backup.sh                     # Backup script
+│   └── cleanup.sh                    # Cleanup old sessions
+│
+├── config/                           # Configuration files
+│   ├── config.yaml                   # Application configuration
+│   ├── logging.yaml                  # Logging configuration
+│   └── docker/
+│       └── init.sql                  # Database initialization
+│
+├── data/                             # Runtime data (gitignored)
+│   └── sessions/                     # Session media files
+│       └── {session_id}/
+│           ├── audio/
+│           ├── video/
+│           ├── whiteboard/
+│           └── screen/
+│
+└── logs/                             # Application logs (gitignored)
+    └── app.log
+```
+
+**Key Principles**:
+1. **Maximum 10 files in project root** - Only essential files
+2. **Clear module separation** - Each directory has single responsibility
+3. **Test structure mirrors source** - Easy to find corresponding tests
+4. **Documentation organized by audience** - User vs developer docs separated
+5. **No scattered files** - Everything has a designated place
+
+
+### Structure Enforcement
+
+**Linting Rules** (pyproject.toml):
+
+```toml
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "PTH", # flake8-use-pathlib
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # Allow unused imports in __init__.py
+"tests/*" = ["S101"]      # Allow assert in tests
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+# Enforce file organization
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"  # Require absolute imports
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --strict-markers --cov=src --cov-report=term-missing"
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+files = ["src"]
+
+[tool.black]
+line-length = 100
+target-version = ['py310']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+```
+
+**STRUCTURE.md Documentation**:
+
+**Location**: `docs/STRUCTURE.md`
+
+```markdown
+# Project Structure
+
+This document describes the organization of the codebase.
+
+## Directory Overview
+
+### `/src` - Source Code
+All application code lives here. Organized by functional area.
+
+- **core/**: Business logic (session management, AI interviewer, evaluation)
+- **communication/**: Input/output modes (audio, video, whiteboard, screen)
+- **storage/**: Data persistence (database, file storage)
+- **monitoring/**: Logging, metrics, token tracking
+- **ui/**: Streamlit UI components
+- **utils/**: Shared utilities and helpers
+
+### `/tests` - Test Code
+All tests organized to mirror source structure.
+
+- **unit/**: Fast, isolated tests for individual components
+- **integration/**: Tests for component interactions
+- **e2e/**: End-to-end workflow tests
+
+### `/docs` - Documentation
+All documentation organized by audience.
+
+- **user-guide/**: For end users (non-technical)
+- **developer-guide/**: For contributors (technical)
+- **api/**: API reference documentation
+- **adr/**: Architecture Decision Records
+- **implementation-notes/**: Detailed implementation docs
+
+### `/scripts` - Utility Scripts
+Automation and maintenance scripts.
+
+- Setup scripts (startup.sh, dev_setup.sh)
+- Validation scripts (validate_setup.py)
+- Maintenance scripts (backup.sh, cleanup.sh)
+
+### `/config` - Configuration
+Configuration files separate from code.
+
+- Application config (config.yaml)
+- Logging config (logging.yaml)
+- Docker initialization (docker/init.sql)
+
+### `/data` - Runtime Data
+Generated at runtime, not in version control.
+
+- Session media files organized by session ID
+- Subdirectories for each media type
+
+### `/logs` - Application Logs
+Log files, not in version control.
+
+## File Naming Conventions
+
+- Python modules: `snake_case.py`
+- Test files: `test_<module_name>.py`
+- Documentation: `kebab-case.md`
+- Scripts: `snake_case.sh` or `snake_case.py`
+- Config files: `kebab-case.yaml`
+
+## Import Guidelines
+
+Always use absolute imports from `src`:
+
+```python
+# Good
+from src.core.session_manager import SessionManager
+from src.storage.data_store import IDataStore
+
+# Bad
+from ..core.session_manager import SessionManager
+from .data_store import IDataStore
+```
+
+## Adding New Files
+
+When adding new files, follow these rules:
+
+1. **Source code** → `/src/<appropriate_module>/`
+2. **Tests** → `/tests/<unit|integration|e2e>/<mirror_src_structure>/`
+3. **Documentation** → `/docs/<user-guide|developer-guide|api>/`
+4. **Scripts** → `/scripts/`
+5. **Config** → `/config/`
+
+Never add files directly to project root unless absolutely necessary.
+
+## Module Responsibilities
+
+Each module has a single, clear responsibility:
+
+- **session_manager**: Orchestrates session lifecycle
+- **ai_interviewer**: Conducts interviews with LLM
+- **evaluation_manager**: Generates feedback reports
+- **communication_manager**: Handles I/O modes
+- **data_store**: Persists data to database
+- **file_storage**: Manages media files
+- **logging_manager**: Centralized logging
+- **token_tracker**: Tracks AI API usage
+
+## Dependency Rules
+
+- **core/** can depend on: storage, monitoring, utils
+- **communication/** can depend on: storage, monitoring, utils
+- **ui/** can depend on: core, communication, utils
+- **storage/** can depend on: utils only
+- **monitoring/** can depend on: storage, utils
+- **utils/** has no dependencies (leaf nodes)
+
+No circular dependencies allowed.
+```
+
+
+## GitHub Pages Documentation Site (Requirement 23)
+
+### Documentation Framework
+
+**Technology**: MkDocs with Material theme
+
+**Rationale**:
+- Markdown-based (easy to write and maintain)
+- Beautiful, responsive design
+- Built-in search functionality
+- Easy GitHub Pages deployment
+- Version control friendly
+- Supports code highlighting and diagrams
+
+### Site Structure
+
+**Location**: All documentation in `/docs` directory
+
+**MkDocs Configuration** (`mkdocs.yml`):
+
+```yaml
+site_name: AI Mock Interview Platform
+site_description: Practice system design interviews with AI
+site_author: Your Team
+site_url: https://yourusername.github.io/ai-mock-interview-platform/
+
+repo_name: yourusername/ai-mock-interview-platform
+repo_url: https://github.com/yourusername/ai-mock-interview-platform
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    # Light mode
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_source: true
+            show_root_heading: true
+            heading_level: 2
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  
+  - User Guide:
+    - Quick Start: user-guide/quick-start.md
+    - Using the Platform: user-guide/using-the-platform.md
+    - Troubleshooting: user-guide/troubleshooting.md
+    - FAQ: user-guide/faq.md
+  
+  - Developer Guide:
+    - Setup: developer-guide/setup.md
+    - Architecture: developer-guide/architecture.md
+    - Contributing: developer-guide/contributing.md
+    - Code Standards: developer-guide/code-standards.md
+    - Testing Guide: developer-guide/testing-guide.md
+    - Debugging: developer-guide/debugging.md
+  
+  - API Reference:
+    - Session Manager: api/session-manager.md
+    - AI Interviewer: api/ai-interviewer.md
+    - Data Store: api/data-store.md
+  
+  - Architecture:
+    - Overview: developer-guide/architecture.md
+    - Decision Records:
+      - PostgreSQL in Docker: adr/001-postgresql-docker.md
+      - Streamlit UI: adr/002-streamlit-ui.md
+      - LangChain Integration: adr/003-langchain-integration.md
+  
+  - Implementation Notes:
+    - Resume Parsing: implementation-notes/resume-parsing.md
+    - Token Tracking: implementation-notes/token-tracking.md
+    - Error Handling: implementation-notes/error-handling.md
+  
+  - Changelog: CHANGELOG.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/yourusername/ai-mock-interview-platform
+  version:
+    provider: mike
+```
+
+
+### CI/CD for GitHub Pages
+
+**GitHub Actions Workflow** (`.github/workflows/docs.yml`):
+
+```yaml
+name: Deploy Documentation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:  # Allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for git info
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install dependencies
+        run: |
+          pip install mkdocs-material
+          pip install mkdocstrings[python]
+          pip install pymdown-extensions
+      
+      - name: Build documentation
+        run: mkdocs build --strict
+      
+      - name: Deploy to GitHub Pages
+        run: mkdocs gh-deploy --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Verify deployment
+        run: |
+          echo "Documentation deployed to:"
+          echo "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+```
+
+**Deployment Process**:
+
+1. Developer updates documentation in `/docs` directory
+2. Commits and pushes to `main` branch
+3. GitHub Actions workflow triggers automatically
+4. MkDocs builds static site from markdown files
+5. Site deployed to GitHub Pages within 5 minutes
+6. Available at `https://yourusername.github.io/ai-mock-interview-platform/`
+
+**Local Preview**:
+
+```bash
+# Install MkDocs
+pip install mkdocs-material mkdocstrings[python]
+
+# Serve documentation locally
+mkdocs serve
+
+# Open browser to http://localhost:8000
+# Auto-reloads on file changes
+```
+
+### Documentation Homepage
+
+**Location**: `docs/index.md`
+
+```markdown
+# AI Mock Interview Platform
+
+Practice system design interviews with an AI interviewer that provides real-time feedback.
+
+## Quick Links
+
+<div class="grid cards" markdown>
+
+-   :material-rocket-launch:{ .lg .middle } __Quick Start__
+
+    ---
+
+    Get started in 10 minutes with our step-by-step guide
+
+    [:octicons-arrow-right-24: Quick Start Guide](user-guide/quick-start.md)
+
+-   :material-code-braces:{ .lg .middle } __For Developers__
+
+    ---
+
+    Set up your development environment and start contributing
+
+    [:octicons-arrow-right-24: Developer Setup](developer-guide/setup.md)
+
+-   :material-book-open-variant:{ .lg .middle } __API Reference__
+
+    ---
+
+    Detailed API documentation for all components
+
+    [:octicons-arrow-right-24: API Docs](api/session-manager.md)
+
+-   :material-help-circle:{ .lg .middle } __Need Help?__
+
+    ---
+
+    Troubleshooting guides and FAQ
+
+    [:octicons-arrow-right-24: Troubleshooting](user-guide/troubleshooting.md)
+
+</div>
+
+## Features
+
+- **Multiple Communication Modes**: Audio, video, whiteboard, and screen sharing
+- **AI-Powered Feedback**: Detailed evaluation with improvement plans
+- **Resume-Aware**: Problems tailored to your experience level
+- **Local-First**: All data stored locally, no cloud dependencies
+- **Production-Quality**: Clean code, comprehensive tests, full documentation
+
+## Architecture Overview
+
+```mermaid
+graph TB
+    UI[Streamlit UI]
+    SM[Session Manager]
+    AI[AI Interviewer]
+    DB[(PostgreSQL)]
+    FS[File Storage]
+    
+    UI --> SM
+    SM --> AI
+    SM --> DB
+    SM --> FS
+```
+
+## Getting Started
+
+Choose your path:
+
+=== "End User"
+
+    New to the platform? Start here:
+    
+    1. [Quick Start Guide](user-guide/quick-start.md) - Get up and running
+    2. [Using the Platform](user-guide/using-the-platform.md) - Learn the features
+    3. [FAQ](user-guide/faq.md) - Common questions
+
+=== "Developer"
+
+    Want to contribute? Start here:
+    
+    1. [Developer Setup](developer-guide/setup.md) - Environment setup
+    2. [Architecture](developer-guide/architecture.md) - System design
+    3. [Contributing](developer-guide/contributing.md) - Contribution guidelines
+    4. [Code Standards](developer-guide/code-standards.md) - Coding conventions
+
+## Latest Updates
+
+See [CHANGELOG](CHANGELOG.md) for recent changes and releases.
+
+## Support
+
+- **Issues**: [GitHub Issues](https://github.com/yourusername/ai-mock-interview-platform/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/ai-mock-interview-platform/discussions)
+- **Documentation**: You're reading it!
+```
+
+
+## Documentation Validation (Requirement 24)
+
+### Automated Documentation Testing
+
+**Purpose**: Ensure all setup instructions are accurate and complete
+
+**Test Framework**: pytest with custom documentation validators
+
+**Location**: `tests/documentation/`
+
+### Documentation Test Suite
+
+**Location**: `tests/documentation/test_setup_instructions.py`
+
+```python
+"""
+Tests that validate setup instructions in documentation.
+Ensures all documented commands and steps actually work.
+"""
+
+import subprocess
+import pytest
+from pathlib import Path
+from typing import List, Tuple
+
+class DocumentationValidator:
+    """Validates documentation instructions."""
+    
+    def __init__(self, doc_path: Path):
+        self.doc_path = doc_path
+        self.content = doc_path.read_text()
+    
+    def extract_commands(self) -> List[str]:
+        """Extract shell commands from markdown code blocks."""
+        commands = []
+        in_code_block = False
+        current_lang = None
+        
+        for line in self.content.split('\n'):
+            if line.startswith('```'):
+                if in_code_block:
+                    in_code_block = False
+                    current_lang = None
+                else:
+                    in_code_block = True
+                    current_lang = line[3:].strip()
+            elif in_code_block and current_lang in ['bash', 'sh', 'shell']:
+                if line.strip() and not line.strip().startswith('#'):
+                    commands.append(line.strip())
+        
+        return commands
+    
+    def extract_file_references(self) -> List[str]:
+        """Extract file paths mentioned in documentation."""
+        import re
+        # Match file paths like `path/to/file.ext` or "path/to/file.ext"
+        pattern = r'[`"]([a-zA-Z0-9_\-./]+\.[a-zA-Z0-9]+)[`"]'
+        return re.findall(pattern, self.content)
+    
+    def extract_links(self) -> List[str]:
+        """Extract URLs from documentation."""
+        import re
+        # Match markdown links [text](url)
+        pattern = r'\[([^\]]+)\]\(([^)]+)\)'
+        return [url for text, url in re.findall(pattern, self.content)]
+
+@pytest.fixture
+def quick_start_doc():
+    """Load Quick Start Guide."""
+    return DocumentationValidator(Path("docs/user-guide/quick-start.md"))
+
+@pytest.fixture
+def dev_setup_doc():
+    """Load Developer Setup Guide."""
+    return DocumentationValidator(Path("docs/developer-guide/setup.md"))
+
+class TestQuickStartGuide:
+    """Test Quick Start Guide instructions."""
+    
+    def test_all_referenced_files_exist(self, quick_start_doc):
+        """Verify all files mentioned in Quick Start exist."""
+        files = quick_start_doc.extract_file_references()
+        missing = []
+        
+        for file_path in files:
+            if not Path(file_path).exists():
+                missing.append(file_path)
+        
+        assert not missing, f"Missing files referenced in Quick Start: {missing}"
+    
+    def test_download_links_accessible(self, quick_start_doc):
+        """Verify all download links are accessible."""
+        import requests
+        
+        links = quick_start_doc.extract_links()
+        external_links = [link for link in links if link.startswith('http')]
+        
+        failed = []
+        for link in external_links:
+            try:
+                response = requests.head(link, timeout=10, allow_redirects=True)
+                if response.status_code >= 400:
+                    failed.append((link, response.status_code))
+            except Exception as e:
+                failed.append((link, str(e)))
+        
+        assert not failed, f"Inaccessible links: {failed}"
+    
+    def test_env_template_exists(self):
+        """Verify .env.template file exists as documented."""
+        assert Path(".env.template").exists(), ".env.template not found"
+    
+    def test_startup_script_exists(self):
+        """Verify startup.sh script exists as documented."""
+        assert Path("scripts/startup.sh").exists(), "startup.sh not found"
+    
+    def test_docker_compose_file_exists(self):
+        """Verify docker-compose.yml exists as documented."""
+        assert Path("docker-compose.yml").exists(), "docker-compose.yml not found"
+
+class TestDeveloperSetupGuide:
+    """Test Developer Setup Guide instructions."""
+    
+    def test_requirements_files_exist(self):
+        """Verify requirements files exist as documented."""
+        assert Path("requirements.txt").exists(), "requirements.txt not found"
+        assert Path("requirements-dev.txt").exists(), "requirements-dev.txt not found"
+    
+    def test_dev_setup_script_exists(self):
+        """Verify dev_setup.sh script exists as documented."""
+        assert Path("scripts/dev_setup.sh").exists(), "dev_setup.sh not found"
+    
+    def test_validation_script_exists(self):
+        """Verify validation scripts exist as documented."""
+        assert Path("scripts/validate_setup.py").exists()
+        assert Path("scripts/validate_dev_setup.py").exists()
+    
+    def test_precommit_config_exists(self):
+        """Verify pre-commit config exists as documented."""
+        assert Path(".pre-commit-config.yaml").exists()
+    
+    def test_python_version_requirement(self):
+        """Verify Python version meets documented requirement."""
+        import sys
+        version = sys.version_info
+        assert version.major == 3 and version.minor >= 10, \
+            f"Python 3.10+ required, found {version.major}.{version.minor}"
+    
+    def test_all_documented_directories_exist(self):
+        """Verify all documented directories exist."""
+        required_dirs = [
+            "src", "tests", "docs", "scripts", "config",
+            "src/core", "src/communication", "src/storage",
+            "tests/unit", "tests/integration", "tests/e2e"
+        ]
+        
+        missing = [d for d in required_dirs if not Path(d).exists()]
+        assert not missing, f"Missing directories: {missing}"
+
+class TestDockerSetup:
+    """Test Docker setup instructions."""
+    
+    def test_docker_compose_valid(self):
+        """Verify docker-compose.yml is valid."""
+        result = subprocess.run(
+            ["docker-compose", "config"],
+            capture_output=True,
+            text=True
+        )
+        assert result.returncode == 0, f"Invalid docker-compose.yml: {result.stderr}"
+    
+    def test_docker_compose_services_defined(self):
+        """Verify required services are defined in docker-compose.yml."""
+        import yaml
+        
+        with open("docker-compose.yml") as f:
+            config = yaml.safe_load(f)
+        
+        required_services = ["postgres", "app"]
+        defined_services = list(config.get("services", {}).keys())
+        
+        missing = [s for s in required_services if s not in defined_services]
+        assert not missing, f"Missing services in docker-compose.yml: {missing}"
+```
+
+
+### Command Validation Tests
+
+**Location**: `tests/documentation/test_command_execution.py`
+
+```python
+"""
+Tests that execute documented commands to verify they work.
+"""
+
+import subprocess
+import pytest
+from pathlib import Path
+
+@pytest.mark.slow
+class TestDocumentedCommands:
+    """Test commands from documentation actually work."""
+    
+    def test_docker_version_command(self):
+        """Test: docker --version"""
+        result = subprocess.run(
+            ["docker", "--version"],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        assert result.returncode == 0
+        assert "Docker version" in result.stdout
+    
+    def test_docker_compose_version_command(self):
+        """Test: docker-compose --version"""
+        result = subprocess.run(
+            ["docker-compose", "--version"],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        assert result.returncode == 0
+    
+    def test_python_version_command(self):
+        """Test: python --version"""
+        result = subprocess.run(
+            ["python3", "--version"],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        assert result.returncode == 0
+        assert "Python 3." in result.stdout
+    
+    def test_pip_install_dry_run(self):
+        """Test: pip install requirements (dry run)"""
+        result = subprocess.run(
+            ["pip", "install", "--dry-run", "-r", "requirements.txt"],
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+        # Dry run should succeed or show what would be installed
+        assert result.returncode == 0 or "Would install" in result.stdout
+    
+    def test_mkdocs_build(self):
+        """Test: mkdocs build"""
+        result = subprocess.run(
+            ["mkdocs", "build", "--strict"],
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+        assert result.returncode == 0, f"MkDocs build failed: {result.stderr}"
+        assert Path("site/index.html").exists()
+
+class TestValidationScripts:
+    """Test validation scripts work as documented."""
+    
+    def test_validate_setup_script_runs(self):
+        """Test: python scripts/validate_setup.py"""
+        result = subprocess.run(
+            ["python", "scripts/validate_setup.py"],
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+        # Script should run without crashing
+        assert result.returncode in [0, 1]  # 0=success, 1=validation failed
+        assert "VALIDATION" in result.stdout
+    
+    def test_validate_dev_setup_script_runs(self):
+        """Test: python scripts/validate_dev_setup.py"""
+        result = subprocess.run(
+            ["python", "scripts/validate_dev_setup.py"],
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+        assert result.returncode in [0, 1]
+        assert "DEVELOPMENT ENVIRONMENT" in result.stdout
+
+### Manual Validation Checklist
+
+**Location**: `docs/developer-guide/manual-validation-checklist.md`
+
+For steps that cannot be automated:
+
+```markdown
+# Manual Validation Checklist
+
+This checklist covers setup steps that require manual verification.
+
+## Quick Start Guide Validation
+
+- [ ] Download links work in browser
+- [ ] Docker Desktop installer runs successfully
+- [ ] API key creation process works
+- [ ] Screenshots match current UI
+- [ ] Estimated times are accurate
+- [ ] Success indicators are visible
+- [ ] Error messages are helpful
+
+## Developer Setup Guide Validation
+
+- [ ] IDE configuration instructions work
+- [ ] Debugger setup instructions work
+- [ ] Breakpoints can be set and hit
+- [ ] All recommended extensions install
+- [ ] Code formatting works as described
+- [ ] Linting catches documented issues
+
+## Docker Setup Validation
+
+- [ ] Docker containers start successfully
+- [ ] Health checks pass
+- [ ] Database is accessible
+- [ ] Application UI loads
+- [ ] Logs are visible and readable
+
+## Testing Validation
+
+- [ ] All tests run successfully
+- [ ] Coverage reports generate
+- [ ] Test output is readable
+- [ ] Failed tests show clear errors
+
+## Documentation Validation
+
+- [ ] All links work
+- [ ] All images display
+- [ ] Search functionality works
+- [ ] Code examples are correct
+- [ ] Diagrams render properly
+
+## Validation Schedule
+
+- **Before each release**: Run full checklist
+- **Monthly**: Spot check random items
+- **After doc updates**: Validate affected sections
+```
+
+
+### CI/CD Integration for Documentation Validation
+
+**GitHub Actions Workflow** (`.github/workflows/validate-docs.yml`):
+
+```yaml
+name: Validate Documentation
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'scripts/**'
+      - 'requirements*.txt'
+      - 'docker-compose.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+
+jobs:
+  validate-docs:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.10', '3.11']
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+          pip install pytest requests pyyaml
+      
+      - name: Run documentation tests
+        run: pytest tests/documentation/ -v
+      
+      - name: Validate file references
+        run: python scripts/validate_doc_references.py
+      
+      - name: Check for broken links
+        run: python scripts/check_doc_links.py
+      
+      - name: Validate code examples
+        run: python scripts/validate_code_examples.py
+      
+      - name: Build documentation
+        run: mkdocs build --strict
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: doc-validation-results-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: |
+            test-results/
+            site/
+
+  validate-setup-instructions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Validate docker-compose
+        run: docker-compose config
+      
+      - name: Test Docker setup
+        run: |
+          docker-compose up -d postgres
+          sleep 10
+          docker exec interview_platform_db pg_isready -U interview_user
+          docker-compose down
+      
+      - name: Validate scripts are executable
+        run: |
+          test -x scripts/startup.sh
+          test -x scripts/dev_setup.sh
+          test -x scripts/backup.sh
+```
+
+### Documentation Validation Scripts
+
+**Link Checker** (`scripts/check_doc_links.py`):
+
+```python
+"""Check all links in documentation are valid."""
+
+import re
+import requests
+from pathlib import Path
+from typing import List, Tuple
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+def extract_links(file_path: Path) -> List[Tuple[str, int]]:
+    """Extract all links from markdown file with line numbers."""
+    content = file_path.read_text()
+    links = []
+    
+    for i, line in enumerate(content.split('\n'), 1):
+        # Match markdown links [text](url)
+        for match in re.finditer(r'\[([^\]]+)\]\(([^)]+)\)', line):
+            url = match.group(2)
+            if url.startswith('http'):
+                links.append((url, i))
+    
+    return links
+
+def check_link(url: str) -> Tuple[str, bool, str]:
+    """Check if a link is accessible."""
+    try:
+        response = requests.head(url, timeout=10, allow_redirects=True)
+        if response.status_code < 400:
+            return (url, True, "OK")
+        return (url, False, f"HTTP {response.status_code}")
+    except Exception as e:
+        return (url, False, str(e))
+
+def main():
+    """Check all links in documentation."""
+    docs_dir = Path("docs")
+    all_links = []
+    
+    # Collect all links
+    for md_file in docs_dir.rglob("*.md"):
+        links = extract_links(md_file)
+        all_links.extend([(md_file, url, line) for url, line in links])
+    
+    print(f"Checking {len(all_links)} links...")
+    
+    # Check links in parallel
+    broken_links = []
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        futures = {
+            executor.submit(check_link, url): (file, url, line)
+            for file, url, line in all_links
+        }
+        
+        for future in as_completed(futures):
+            file, url, line = futures[future]
+            url_result, is_valid, message = future.result()
+            
+            if not is_valid:
+                broken_links.append((file, line, url, message))
+                print(f"❌ {file}:{line} - {url} - {message}")
+    
+    if broken_links:
+        print(f"\n❌ Found {len(broken_links)} broken links")
+        return 1
+    else:
+        print(f"\n✅ All {len(all_links)} links are valid")
+        return 0
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(main())
+```
+
+**Code Example Validator** (`scripts/validate_code_examples.py`):
+
+```python
+"""Validate code examples in documentation are syntactically correct."""
+
+import re
+import ast
+from pathlib import Path
+from typing import List, Tuple
+
+def extract_python_code_blocks(file_path: Path) -> List[Tuple[str, int]]:
+    """Extract Python code blocks from markdown."""
+    content = file_path.read_text()
+    code_blocks = []
+    
+    in_code_block = False
+    current_code = []
+    start_line = 0
+    current_lang = None
+    
+    for i, line in enumerate(content.split('\n'), 1):
+        if line.startswith('```'):
+            if in_code_block:
+                if current_lang == 'python':
+                    code_blocks.append(('\n'.join(current_code), start_line))
+                in_code_block = False
+                current_code = []
+                current_lang = None
+            else:
+                in_code_block = True
+                start_line = i + 1
+                current_lang = line[3:].strip()
+        elif in_code_block:
+            current_code.append(line)
+    
+    return code_blocks
+
+def validate_python_syntax(code: str) -> Tuple[bool, str]:
+    """Check if Python code is syntactically valid."""
+    try:
+        ast.parse(code)
+        return (True, "OK")
+    except SyntaxError as e:
+        return (False, f"Syntax error at line {e.lineno}: {e.msg}")
+
+def main():
+    """Validate all Python code examples in documentation."""
+    docs_dir = Path("docs")
+    errors = []
+    total_blocks = 0
+    
+    for md_file in docs_dir.rglob("*.md"):
+        code_blocks = extract_python_code_blocks(md_file)
+        total_blocks += len(code_blocks)
+        
+        for code, line_num in code_blocks:
+            is_valid, message = validate_python_syntax(code)
+            if not is_valid:
+                errors.append((md_file, line_num, message))
+                print(f"❌ {md_file}:{line_num} - {message}")
+    
+    if errors:
+        print(f"\n❌ Found {len(errors)} invalid code examples out of {total_blocks}")
+        return 1
+    else:
+        print(f"\n✅ All {total_blocks} Python code examples are valid")
+        return 0
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(main())
+```
+
+### Documentation Coverage Metrics
+
+Track documentation completeness:
+
+```python
+"""Calculate documentation coverage metrics."""
+
+from pathlib import Path
+import ast
+
+def count_documented_functions(file_path: Path) -> tuple[int, int]:
+    """Count functions and how many have docstrings."""
+    content = file_path.read_text()
+    tree = ast.parse(content)
+    
+    total_functions = 0
+    documented_functions = 0
+    
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            total_functions += 1
+            if ast.get_docstring(node):
+                documented_functions += 1
+    
+    return total_functions, documented_functions
+
+def main():
+    """Calculate documentation coverage for the project."""
+    src_dir = Path("src")
+    total_funcs = 0
+    documented_funcs = 0
+    
+    for py_file in src_dir.rglob("*.py"):
+        if py_file.name == "__init__.py":
+            continue
+        
+        funcs, docs = count_documented_functions(py_file)
+        total_funcs += funcs
+        documented_funcs += docs
+    
+    coverage = (documented_funcs / total_funcs * 100) if total_funcs > 0 else 0
+    
+    print(f"Documentation Coverage: {coverage:.1f}%")
+    print(f"Documented functions: {documented_funcs}/{total_funcs}")
+    
+    if coverage < 80:
+        print("❌ Documentation coverage below 80%")
+        return 1
+    else:
+        print("✅ Documentation coverage meets requirement")
+        return 0
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(main())
+```
+
+## Summary of New Design Elements
+
+The design now comprehensively addresses Requirements 20-24:
+
+**Requirement 20 (End-User Documentation)**:
+- Quick Start Guide with plain language and screenshots
+- Startup validation script with clear error messages
+- Step-by-step instructions with time estimates
+- Troubleshooting guide for common issues
+
+**Requirement 21 (Developer Documentation)**:
+- Comprehensive Developer Setup Guide
+- Automated setup scripts (dev_setup.sh)
+- Development environment validation
+- Architecture diagrams and workflow documentation
+- Debugging instructions with examples
+
+**Requirement 22 (Project Organization)**:
+- Clean directory structure with max 10 root files
+- Organized by functional area (src/, tests/, docs/, scripts/, config/)
+- STRUCTURE.md documenting organization
+- Linting rules enforcing structure
+- Clear module responsibilities and dependencies
+
+**Requirement 23 (GitHub Pages)**:
+- MkDocs with Material theme for documentation site
+- Automated deployment via GitHub Actions
+- Search functionality and responsive design
+- API documentation generated from code
+- Changelog and implementation notes
+
+**Requirement 24 (Documentation Validation)**:
+- Automated tests for setup instructions
+- Link checker for broken URLs
+- Code example syntax validation
+- Multi-OS testing (Windows, macOS, Linux)
+- Manual validation checklist for non-automatable steps
+- CI/CD integration blocking invalid documentation
+
+All documentation is validated automatically on every commit, ensuring instructions remain accurate and complete.

@@ -17,3 +17,9 @@ pre-commit==3.6.0
 # Type Stubs
 types-PyYAML==6.0.12.12
 types-pillow==10.1.0.2
+
+# Documentation
+mkdocs==1.5.3
+mkdocs-material==9.5.3
+mkdocstrings[python]==0.24.0
+pymdown-extensions==10.7
