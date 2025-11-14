@@ -1,0 +1,2483 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A local AI-powered mock interview platform for system design practice">
+      
+      
+        <meta name="author" content="AI Mock Interview Platform Team">
+      
+      
+        <link rel="canonical" href="https://yourusername.github.io/ai-mock-interview-platform/DOCUMENTATION_VALIDATION_CHECKLIST/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Documentation Validation Checklist - AI Mock Interview Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#documentation-validation-checklist" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="AI Mock Interview Platform" class="md-header__button md-logo" aria-label="AI Mock Interview Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AI Mock Interview Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Documentation Validation Checklist
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/yourusername/ai-mock-interview-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ai-mock-interview-platform
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../quick-start/" class="md-tabs__link">
+          
+  
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../architecture.md" class="md-tabs__link">
+          
+  
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../features/token-tracking/" class="md-tabs__link">
+          
+  
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../contributing/" class="md-tabs__link">
+          
+  
+  
+  Contributing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api/" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="AI Mock Interview Platform" class="md-nav__button md-logo" aria-label="AI Mock Interview Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    AI Mock Interview Platform
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/yourusername/ai-mock-interview-platform" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ai-mock-interview-platform
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quick-start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developer-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Components
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Components
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/session-manager/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Session Manager
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/ai-interviewer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Interviewer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/communication-manager/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Communication Manager
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/evaluation-manager/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluation Manager
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/resume-manager/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resume Manager
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UI Components
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    UI Components
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ui/setup-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ui/interview-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interview UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ui/recording-controls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recording Controls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/token-tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Token Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/evaluation-quick-start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluation Quick Start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contributing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contribution Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../code-standards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Standards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implementation-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Implementation Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-test-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation Test Coverage
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Validation Test Coverage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automated-tests-scriptsvalidate_documentationpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automated Tests (scripts/validate_documentation.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-tests-this-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual Tests (This Checklist)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manual-validation-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual Validation Checklist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Manual Validation Checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-quick-start-guide-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Quick Start Guide Validation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Quick Start Guide Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-prerequisites-section" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Prerequisites Section
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-docker-installation-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Docker Installation Instructions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-api-key-acquisition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 API Key Acquisition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-platform-download" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Platform Download
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-configuration-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 Configuration Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-startup-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 Startup Instructions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-platform-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 Platform Usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-troubleshooting-section" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.8 Troubleshooting Section
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-developer-setup-guide-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Developer Setup Guide Validation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Developer Setup Guide Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-environment-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Environment Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-docker-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Docker Services
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-database-initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Database Initialization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-application-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Application Execution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7 Debugging
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28-code-quality-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.8 Code Quality Tools
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29-development-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.9 Development Workflows
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-architecture-documentation-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Architecture Documentation Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-api-documentation-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. API Documentation Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-cross-platform-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Cross-Platform Validation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Cross-Platform Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-windows-specific" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Windows-Specific
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-macos-specific" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 macOS-Specific
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-linux-specific" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Linux-Specific
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-screenshots-and-visual-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Screenshots and Visual Elements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-links-and-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Links and References
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-user-experience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. User Experience
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-consistency-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Consistency Checks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-completeness-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Completeness Checks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-procedure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing Procedure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Procedure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#before-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before Release
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#after-documentation-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After Documentation Updates
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#issue-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue Reporting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-frequency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation Frequency
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-sign-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation Sign-Off
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Validation Sign-Off">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#last-full-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Last Full Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuous-improvement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous Improvement
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="documentation-validation-checklist">Documentation Validation Checklist<a class="headerlink" href="#documentation-validation-checklist" title="Permanent link">&para;</a></h1>
+<p>This document provides a comprehensive checklist for validating documentation that cannot be fully automated. Use this checklist when updating documentation or before major releases.</p>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>The automated validation script (<code>scripts/validate_documentation.py</code>) covers:
+- ✅ File and directory references
+- ✅ URL accessibility
+- ✅ Command syntax validation
+- ✅ Required sections presence
+- ✅ Environment variable documentation
+- ✅ Project structure validation</p>
+<p>This manual checklist covers aspects that require human judgment and testing.</p>
+<h2 id="validation-test-coverage">Validation Test Coverage<a class="headerlink" href="#validation-test-coverage" title="Permanent link">&para;</a></h2>
+<h3 id="automated-tests-scriptsvalidate_documentationpy">Automated Tests (scripts/validate_documentation.py)<a class="headerlink" href="#automated-tests-scriptsvalidate_documentationpy" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Test Category</th>
+<th>Coverage</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>File References</td>
+<td>100%</td>
+<td>Validates all referenced files exist</td>
+</tr>
+<tr>
+<td>URL Accessibility</td>
+<td>95%</td>
+<td>Some sites block automated requests (403)</td>
+</tr>
+<tr>
+<td>Command Syntax</td>
+<td>80%</td>
+<td>Validates common command patterns</td>
+</tr>
+<tr>
+<td>Required Sections</td>
+<td>100%</td>
+<td>Checks all mandatory sections present</td>
+</tr>
+<tr>
+<td>Environment Variables</td>
+<td>100%</td>
+<td>Verifies all variables documented</td>
+</tr>
+<tr>
+<td>Project Structure</td>
+<td>100%</td>
+<td>Validates directory and file structure</td>
+</tr>
+</tbody>
+</table>
+<h3 id="manual-tests-this-checklist">Manual Tests (This Checklist)<a class="headerlink" href="#manual-tests-this-checklist" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Test Category</th>
+<th>Coverage</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Setup Instructions</td>
+<td>Manual</td>
+<td>Requires actual execution</td>
+</tr>
+<tr>
+<td>Screenshots</td>
+<td>Manual</td>
+<td>Visual verification needed</td>
+</tr>
+<tr>
+<td>User Experience</td>
+<td>Manual</td>
+<td>Requires human judgment</td>
+</tr>
+<tr>
+<td>Platform-Specific Steps</td>
+<td>Manual</td>
+<td>Requires testing on each OS</td>
+</tr>
+<tr>
+<td>API Key Validation</td>
+<td>Manual</td>
+<td>Requires actual API keys</td>
+</tr>
+<tr>
+<td>Docker Operations</td>
+<td>Manual</td>
+<td>Requires Docker environment</td>
+</tr>
+</tbody>
+</table>
+<h2 id="manual-validation-checklist">Manual Validation Checklist<a class="headerlink" href="#manual-validation-checklist" title="Permanent link">&para;</a></h2>
+<h3 id="1-quick-start-guide-validation">1. Quick Start Guide Validation<a class="headerlink" href="#1-quick-start-guide-validation" title="Permanent link">&para;</a></h3>
+<h4 id="11-prerequisites-section">1.1 Prerequisites Section<a class="headerlink" href="#11-prerequisites-section" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] Verify system requirements are current and accurate</li>
+<li>[ ] Check that estimated time requirements are realistic</li>
+<li>[ ] Confirm all prerequisite links are accessible and correct</li>
+<li>[ ] Verify download links point to latest stable versions</li>
+</ul>
+<h4 id="12-docker-installation-instructions">1.2 Docker Installation Instructions<a class="headerlink" href="#12-docker-installation-instructions" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] <strong>Windows</strong>: Test installation steps on Windows 10/11</li>
+<li>[ ] Download link works</li>
+<li>[ ] Installation wizard steps are accurate</li>
+<li>[ ] Docker Desktop starts successfully</li>
+<li>[ ] Whale icon appears in system tray</li>
+<li>[ ] <strong>macOS</strong>: Test installation steps on macOS (Intel and Apple Silicon)</li>
+<li>[ ] Download link works for both architectures</li>
+<li>[ ] Installation steps are accurate</li>
+<li>[ ] Docker Desktop starts successfully</li>
+<li>[ ] Whale icon appears in menu bar</li>
+<li>[ ] <strong>Linux</strong>: Test installation steps on Ubuntu/Debian</li>
+<li>[ ] Installation commands work</li>
+<li>[ ] Docker Desktop starts successfully</li>
+</ul>
+<h4 id="13-api-key-acquisition">1.3 API Key Acquisition<a class="headerlink" href="#13-api-key-acquisition" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] OpenAI signup link works</li>
+<li>[ ] API key creation steps are accurate</li>
+<li>[ ] Screenshots match current OpenAI interface (if included)</li>
+<li>[ ] Cost information is current and accurate</li>
+<li>[ ] Spending limit instructions are correct</li>
+</ul>
+<h4 id="14-platform-download">1.4 Platform Download<a class="headerlink" href="#14-platform-download" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] Download link works (or placeholder is clearly marked)</li>
+<li>[ ] Extraction instructions are clear</li>
+<li>[ ] Folder structure matches documentation</li>
+</ul>
+<h4 id="15-configuration-steps">1.5 Configuration Steps<a class="headerlink" href="#15-configuration-steps" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] <code>.env.template</code> location is correct</li>
+<li>[ ] Copy/rename instructions work on all platforms</li>
+<li>[ ] Example <code>.env</code> values are valid</li>
+<li>[ ] Required vs optional variables are clearly marked</li>
+<li>[ ] Password requirements are specified</li>
+</ul>
+<h4 id="16-startup-instructions">1.6 Startup Instructions<a class="headerlink" href="#16-startup-instructions" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] <strong>Windows</strong>: Test startup commands</li>
+<li>[ ] <code>startup.sh</code> execution works</li>
+<li>[ ] Alternative Command Prompt method works</li>
+<li>[ ] Expected output matches documentation</li>
+<li>[ ] <strong>macOS/Linux</strong>: Test startup commands</li>
+<li>[ ] <code>chmod +x startup.sh</code> works</li>
+<li>[ ] <code>./startup.sh</code> executes successfully</li>
+<li>[ ] Expected output matches documentation</li>
+<li>[ ] Verify startup success message is accurate</li>
+<li>[ ] Confirm port numbers are correct (5432, 8501)</li>
+</ul>
+<h4 id="17-platform-usage">1.7 Platform Usage<a class="headerlink" href="#17-platform-usage" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] Test resume upload with PDF file</li>
+<li>[ ] Test resume upload with text file</li>
+<li>[ ] Verify AI provider selection works</li>
+<li>[ ] Test communication mode selection</li>
+<li>[ ] Verify interview start process</li>
+<li>[ ] Test all UI panels (chat, whiteboard, transcript)</li>
+<li>[ ] Test recording controls</li>
+<li>[ ] Test interview end process</li>
+<li>[ ] Verify evaluation display</li>
+</ul>
+<h4 id="18-troubleshooting-section">1.8 Troubleshooting Section<a class="headerlink" href="#18-troubleshooting-section" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] Test each troubleshooting scenario</li>
+<li>[ ] Verify solutions work as documented</li>
+<li>[ ] Check that error messages match documentation</li>
+<li>[ ] Confirm remediation steps are effective</li>
+</ul>
+<h3 id="2-developer-setup-guide-validation">2. Developer Setup Guide Validation<a class="headerlink" href="#2-developer-setup-guide-validation" title="Permanent link">&para;</a></h3>
+<h4 id="21-prerequisites">2.1 Prerequisites<a class="headerlink" href="#21-prerequisites" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] Verify all software versions are current</li>
+<li>[ ] Test download links for all prerequisites</li>
+<li>[ ] Confirm version compatibility matrix is accurate</li>
+</ul>
+<h4 id="22-environment-setup">2.2 Environment Setup<a class="headerlink" href="#22-environment-setup" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] <strong>Repository Clone</strong>: Test git clone command</li>
+<li>[ ] <strong>Virtual Environment</strong>: Test venv creation on all platforms</li>
+<li>[ ] Windows: <code>python -m venv venv</code> and activation</li>
+<li>[ ] macOS/Linux: <code>python3 -m venv venv</code> and activation</li>
+<li>[ ] <strong>Dependencies</strong>: Test pip install commands</li>
+<li>[ ] <code>pip install -r requirements.txt</code> succeeds</li>
+<li>[ ] <code>pip install -r requirements-dev.txt</code> succeeds</li>
+<li>[ ] All packages install without errors</li>
+<li>[ ] <strong>Environment Variables</strong>: Test .env configuration</li>
+<li>[ ] Template copy works</li>
+<li>[ ] All required variables are documented</li>
+<li>[ ] Example values are valid</li>
+</ul>
+<h4 id="23-docker-services">2.3 Docker Services<a class="headerlink" href="#23-docker-services" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] Test <code>docker-compose up -d</code> command</li>
+<li>[ ] Verify <code>docker-compose ps</code> output matches documentation</li>
+<li>[ ] Test <code>docker-compose logs</code> command</li>
+<li>[ ] Confirm health checks work as documented</li>
+<li>[ ] Test database connection from host</li>
+</ul>
+<h4 id="24-database-initialization">2.4 Database Initialization<a class="headerlink" href="#24-database-initialization" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] Verify <code>init.sql</code> runs automatically</li>
+<li>[ ] Test manual database connection</li>
+<li>[ ] Confirm all tables are created</li>
+<li>[ ] Verify table structure matches schema documentation</li>
+</ul>
+<h4 id="25-application-execution">2.5 Application Execution<a class="headerlink" href="#25-application-execution" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] Test Streamlit direct execution</li>
+<li>[ ] Test Docker Compose execution</li>
+<li>[ ] Test startup script execution</li>
+<li>[ ] Verify hot reloading works</li>
+<li>[ ] Confirm application opens at correct URL</li>
+</ul>
+<h4 id="26-testing">2.6 Testing<a class="headerlink" href="#26-testing" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] Run all unit tests: <code>pytest</code></li>
+<li>[ ] Run specific test file</li>
+<li>[ ] Run with coverage: <code>pytest --cov=src</code></li>
+<li>[ ] Verify coverage report generation</li>
+<li>[ ] Test integration tests</li>
+<li>[ ] Confirm test markers work</li>
+</ul>
+<h4 id="27-debugging">2.7 Debugging<a class="headerlink" href="#27-debugging" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] Test VS Code launch configuration</li>
+<li>[ ] Test PyCharm run configuration</li>
+<li>[ ] Verify breakpoints work</li>
+<li>[ ] Test debug logging</li>
+<li>[ ] Confirm database inspection commands work</li>
+<li>[ ] Test log file access</li>
+</ul>
+<h4 id="28-code-quality-tools">2.8 Code Quality Tools<a class="headerlink" href="#28-code-quality-tools" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] Test pre-commit hook installation</li>
+<li>[ ] Run <code>black</code> formatting</li>
+<li>[ ] Run <code>ruff</code> linting</li>
+<li>[ ] Run <code>mypy</code> type checking</li>
+<li>[ ] Run <code>isort</code> import sorting</li>
+<li>[ ] Verify all tools work without errors</li>
+</ul>
+<h4 id="29-development-workflows">2.9 Development Workflows<a class="headerlink" href="#29-development-workflows" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] Test feature branch creation</li>
+<li>[ ] Test commit message format</li>
+<li>[ ] Verify PR template is accessible</li>
+<li>[ ] Test code review process</li>
+</ul>
+<h3 id="3-architecture-documentation-validation">3. Architecture Documentation Validation<a class="headerlink" href="#3-architecture-documentation-validation" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Verify architecture diagrams are current</li>
+<li>[ ] Check that component descriptions match implementation</li>
+<li>[ ] Confirm SOLID principles examples are accurate</li>
+<li>[ ] Verify dependency injection examples work</li>
+<li>[ ] Check that database schema matches <code>init.sql</code></li>
+</ul>
+<h3 id="4-api-documentation-validation">4. API Documentation Validation<a class="headerlink" href="#4-api-documentation-validation" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Verify all public APIs are documented</li>
+<li>[ ] Check that function signatures match implementation</li>
+<li>[ ] Confirm example code runs without errors</li>
+<li>[ ] Verify return types are accurate</li>
+<li>[ ] Check that exceptions are documented</li>
+</ul>
+<h3 id="5-cross-platform-validation">5. Cross-Platform Validation<a class="headerlink" href="#5-cross-platform-validation" title="Permanent link">&para;</a></h3>
+<h4 id="51-windows-specific">5.1 Windows-Specific<a class="headerlink" href="#51-windows-specific" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] Test all commands in Command Prompt</li>
+<li>[ ] Test all commands in PowerShell</li>
+<li>[ ] Test all commands in Git Bash</li>
+<li>[ ] Verify path separators are correct</li>
+<li>[ ] Test file permissions handling</li>
+</ul>
+<h4 id="52-macos-specific">5.2 macOS-Specific<a class="headerlink" href="#52-macos-specific" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] Test on Intel Mac</li>
+<li>[ ] Test on Apple Silicon Mac</li>
+<li>[ ] Verify Terminal commands work</li>
+<li>[ ] Test file permissions</li>
+<li>[ ] Verify Docker Desktop compatibility</li>
+</ul>
+<h4 id="53-linux-specific">5.3 Linux-Specific<a class="headerlink" href="#53-linux-specific" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] Test on Ubuntu 20.04+</li>
+<li>[ ] Test on Debian</li>
+<li>[ ] Test on Fedora (optional)</li>
+<li>[ ] Verify package manager commands</li>
+<li>[ ] Test Docker installation</li>
+</ul>
+<h3 id="6-screenshots-and-visual-elements">6. Screenshots and Visual Elements<a class="headerlink" href="#6-screenshots-and-visual-elements" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Verify all screenshots are current</li>
+<li>[ ] Check that UI screenshots match current interface</li>
+<li>[ ] Confirm diagrams are readable and accurate</li>
+<li>[ ] Verify code snippets have proper syntax highlighting</li>
+<li>[ ] Check that visual indicators (icons, colors) are correct</li>
+</ul>
+<h3 id="7-links-and-references">7. Links and References<a class="headerlink" href="#7-links-and-references" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Test all internal documentation links</li>
+<li>[ ] Verify all external links are accessible</li>
+<li>[ ] Check that anchor links work correctly</li>
+<li>[ ] Confirm GitHub links point to correct branches/files</li>
+<li>[ ] Verify API documentation links</li>
+</ul>
+<h3 id="8-user-experience">8. User Experience<a class="headerlink" href="#8-user-experience" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Read through documentation as a new user</li>
+<li>[ ] Verify instructions are clear and unambiguous</li>
+<li>[ ] Check that technical jargon is explained</li>
+<li>[ ] Confirm examples are helpful and relevant</li>
+<li>[ ] Verify troubleshooting covers common issues</li>
+</ul>
+<h3 id="9-consistency-checks">9. Consistency Checks<a class="headerlink" href="#9-consistency-checks" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Verify terminology is consistent across all docs</li>
+<li>[ ] Check that version numbers match</li>
+<li>[ ] Confirm file paths are consistent</li>
+<li>[ ] Verify command syntax is consistent</li>
+<li>[ ] Check that formatting is consistent</li>
+</ul>
+<h3 id="10-completeness-checks">10. Completeness Checks<a class="headerlink" href="#10-completeness-checks" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Verify all features are documented</li>
+<li>[ ] Check that all configuration options are explained</li>
+<li>[ ] Confirm all error messages have troubleshooting steps</li>
+<li>[ ] Verify all environment variables are documented</li>
+<li>[ ] Check that all CLI commands are documented</li>
+</ul>
+<h2 id="testing-procedure">Testing Procedure<a class="headerlink" href="#testing-procedure" title="Permanent link">&para;</a></h2>
+<h3 id="before-release">Before Release<a class="headerlink" href="#before-release" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>Run Automated Validation</strong>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python<span class="w"> </span>scripts/validate_documentation.py
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Complete Manual Checklist</strong></p>
+</li>
+<li>Work through each section systematically</li>
+<li>Mark items as complete only after testing</li>
+<li>
+<p>Document any issues found</p>
+</li>
+<li>
+<p><strong>Test on Multiple Platforms</strong></p>
+</li>
+<li>Windows 10/11</li>
+<li>macOS (Intel and Apple Silicon)</li>
+<li>
+<p>Ubuntu 20.04+</p>
+</li>
+<li>
+<p><strong>Fresh Installation Test</strong></p>
+</li>
+<li>Use a clean machine or VM</li>
+<li>Follow Quick Start Guide exactly</li>
+<li>Document any confusion or errors</li>
+<li>
+<p>Time each step to verify estimates</p>
+</li>
+<li>
+<p><strong>Developer Onboarding Test</strong></p>
+</li>
+<li>Have a new developer follow Developer Setup Guide</li>
+<li>Collect feedback on clarity and completeness</li>
+<li>Document any missing steps or confusion</li>
+</ol>
+<h3 id="after-documentation-updates">After Documentation Updates<a class="headerlink" href="#after-documentation-updates" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>Run Automated Validation</strong>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python<span class="w"> </span>scripts/validate_documentation.py
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Review Changed Sections</strong></p>
+</li>
+<li>Test only sections that were modified</li>
+<li>Verify changes don't break existing workflows</li>
+<li>
+<p>Check for broken links or references</p>
+</li>
+<li>
+<p><strong>Peer Review</strong></p>
+</li>
+<li>Have another team member review changes</li>
+<li>Verify technical accuracy</li>
+<li>Check for clarity and completeness</li>
+</ol>
+<h2 id="issue-reporting">Issue Reporting<a class="headerlink" href="#issue-reporting" title="Permanent link">&para;</a></h2>
+<p>When you find issues during manual validation:</p>
+<ol>
+<li><strong>Document the Issue</strong></li>
+<li>What step failed?</li>
+<li>What was expected?</li>
+<li>What actually happened?</li>
+<li>
+<p>What platform/OS?</p>
+</li>
+<li>
+<p><strong>Create GitHub Issue</strong></p>
+</li>
+<li>Use label: <code>documentation</code></li>
+<li>Include reproduction steps</li>
+<li>Add screenshots if relevant</li>
+<li>
+<p>Assign to documentation maintainer</p>
+</li>
+<li>
+<p><strong>Update Checklist</strong></p>
+</li>
+<li>Mark item as failed</li>
+<li>Add notes about the issue</li>
+<li>Link to GitHub issue</li>
+</ol>
+<h2 id="validation-frequency">Validation Frequency<a class="headerlink" href="#validation-frequency" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Before Major Releases</strong>: Complete full checklist</li>
+<li><strong>Before Minor Releases</strong>: Run automated tests + spot check manual items</li>
+<li><strong>After Documentation Updates</strong>: Run automated tests + test changed sections</li>
+<li><strong>Monthly</strong>: Run automated tests to catch link rot</li>
+<li><strong>Quarterly</strong>: Complete full manual checklist</li>
+</ul>
+<h2 id="validation-sign-off">Validation Sign-Off<a class="headerlink" href="#validation-sign-off" title="Permanent link">&para;</a></h2>
+<h3 id="last-full-validation">Last Full Validation<a class="headerlink" href="#last-full-validation" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Date</strong>: <strong><em>_</em></strong>______</li>
+<li><strong>Validator</strong>: <strong><em>_</em></strong>______</li>
+<li><strong>Platform Tested</strong>: <strong><em>_</em></strong>______</li>
+<li><strong>Issues Found</strong>: <strong><em>_</em></strong>______</li>
+<li><strong>Status</strong>: ☐ Pass ☐ Fail ☐ Pass with Notes</li>
+</ul>
+<h3 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h3>
+<hr />
+<hr />
+<hr />
+<h2 id="continuous-improvement">Continuous Improvement<a class="headerlink" href="#continuous-improvement" title="Permanent link">&para;</a></h2>
+<p>This checklist should be updated when:
+- New features are added
+- Documentation structure changes
+- New platforms are supported
+- Common issues are identified
+- Feedback from users suggests improvements</p>
+<hr />
+<p><strong>Last Updated</strong>: 2024-11-13
+<strong>Maintained By</strong>: Development Team
+<strong>Version</strong>: 1.0</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/yourusername/ai-mock-interview-platform" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
