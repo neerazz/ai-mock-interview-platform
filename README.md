@@ -20,10 +20,22 @@ A local proof-of-concept AI-powered mock interview platform focused on System De
 
 ## Prerequisites
 
-- Docker and Docker Compose
-- Python 3.10+ (for local development)
-- OpenAI API key (required)
-- Anthropic API key (optional)
+- **Docker Desktop** (Windows/Mac) or **Docker Engine** (Linux)
+  - Windows: [Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/)
+  - Mac: [Docker Desktop for Mac](https://docs.docker.com/desktop/install/mac-install/)
+  - Linux: [Docker Engine](https://docs.docker.com/engine/install/)
+- **Python 3.10+** (for local development)
+  - Windows: [Python.org](https://www.python.org/downloads/) or [Microsoft Store](https://apps.microsoft.com/store/detail/python-310/9PJPW5LDXLZ5)
+  - Mac: `brew install python@3.10`
+  - Linux: `sudo apt install python3.10` (Ubuntu/Debian)
+- **OpenAI API key** (required)
+- **Anthropic API key** (optional)
+
+### Windows-Specific Requirements
+
+- **WSL2** (Windows Subsystem for Linux 2) - Required for Docker Desktop
+- **Git for Windows** (optional, for Git Bash) - [Download](https://git-scm.com/download/win)
+- **PowerShell 5.1+** or **Windows Terminal** (recommended)
 
 ## Quick Start
 
@@ -35,7 +47,7 @@ git clone <repository-url>
 cd ai-mock-interview-platform
 
 # Copy environment template
-cp config/.env.template .env
+cp .env.template .env
 
 # Edit .env with your API keys
 # Required: DB_PASSWORD, OPENAI_API_KEY
@@ -44,15 +56,43 @@ cp config/.env.template .env
 
 ### 2. Start the Platform
 
+#### Option A: Using Docker Compose (All Platforms)
+
 ```bash
-# Make startup script executable (Linux/Mac)
+# Start services
+docker-compose up -d
+
+# Check logs to verify startup
+docker-compose logs -f
+```
+
+#### Option B: Using Startup Script
+
+**Linux/Mac:**
+```bash
+# Make startup script executable
 chmod +x startup.sh
 
 # Run startup script
 ./startup.sh
 ```
 
-The script will:
+**Windows (PowerShell):**
+```powershell
+# Run Docker Compose directly
+docker-compose up -d
+
+# Verify services are running
+docker-compose ps
+```
+
+**Windows (Git Bash):**
+```bash
+# Run startup script
+bash startup.sh
+```
+
+The startup process will:
 - Validate environment variables
 - Create necessary directories
 - Start Docker services (PostgreSQL + App)
@@ -174,10 +214,37 @@ The platform uses PostgreSQL with the following tables:
 
 ### Local Development Setup
 
+**Linux/Mac:**
 ```bash
 # Create virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run locally (requires PostgreSQL running)
+streamlit run src/main.py
+```
+
+**Windows (PowerShell):**
+```powershell
+# Create virtual environment
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run locally (requires PostgreSQL running)
+streamlit run src/main.py
+```
+
+**Windows (Command Prompt):**
+```cmd
+# Create virtual environment
+python -m venv venv
+venv\Scripts\activate.bat
 
 # Install dependencies
 pip install -r requirements.txt
@@ -241,6 +308,29 @@ The CI pipeline automatically runs all these checks on every push and pull reque
 
 ## Troubleshooting
 
+### Windows-Specific Issues
+
+#### Docker Desktop Not Starting
+- Ensure WSL2 is installed and enabled
+- Check Docker Desktop settings → Resources → WSL Integration
+- Restart Docker Desktop service
+
+#### Line Ending Issues (Git)
+```powershell
+# Configure Git to handle line endings properly
+git config --global core.autocrlf true
+```
+
+#### Permission Issues with Volumes
+- Ensure Docker Desktop has access to the drive where the project is located
+- Docker Desktop → Settings → Resources → File Sharing
+
+#### PowerShell Execution Policy
+```powershell
+# If scripts are blocked, run as Administrator:
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
 ### PostgreSQL Connection Issues
 
 ```bash
@@ -266,13 +356,25 @@ docker-compose up -d --build app
 
 ### Port Already in Use
 
+**Windows:**
+```powershell
+# Check what's using port 8501
+netstat -ano | findstr :8501
+
+# Kill process by PID (if needed)
+taskkill /PID <PID> /F
+```
+
+**Linux/Mac:**
 ```bash
 # Check what's using port 8501
-netstat -ano | findstr :8501  # Windows
-lsof -i :8501                 # Linux/Mac
+lsof -i :8501
 
-# Change port in docker-compose.yml if needed
+# Kill process by PID (if needed)
+kill -9 <PID>
 ```
+
+**Alternative:** Change port in docker-compose.yml if needed
 
 ## Architecture
 
