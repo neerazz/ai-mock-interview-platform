@@ -13,6 +13,9 @@ RUN apt-get update && apt-get install -y \
 # Set working directory
 WORKDIR /app
 
+# Set Python path to include /app
+ENV PYTHONPATH=/app
+
 # Copy requirements
 COPY requirements.txt .
 
@@ -22,7 +25,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY src/ ./src/
 COPY .streamlit/ ./.streamlit/
-COPY config.yaml .
+COPY config/config.yaml ./config.yaml
 
 # Create data and logs directories
 RUN mkdir -p /app/data /app/logs
